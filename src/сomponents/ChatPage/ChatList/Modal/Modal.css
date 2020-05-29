@@ -1,0 +1,26 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+}
+.modal-body {
+  width: 340px;
+  margin: 0;
+  padding: 0;
+  background: url("./fly.svg") top center;
+  background-size: 110% auto;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.close {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

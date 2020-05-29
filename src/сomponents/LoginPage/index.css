@@ -1,0 +1,58 @@
+.main-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(#40a9ff 20%, #bae7ff 90%, #e6fffb);
+}
+.block-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+.block-login h1,
+span {
+  text-align: center;
+}
+.block-login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.block-login-form img {
+  max-width: 50%;
+  margin: 5px;
+}
+.block-login-form-input {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.ant-input,
+.login-button,
+.registr-button {
+  width: 250px;
+  height: 40px;
+  margin: 10px;
+}
+.block-login-button {
+  display: flex;
+  flex-direction: column;
+}
+span.form {
+  width: 26px;
+  height: 26px;
+  left: 14px;
+  line-height: 60px;
+  text-align: center;
+  margin-right: -26px;
+  position: relative;
+  z-index: 1;
+  float: left;
+}
+
+span.form + input {
+  padding-left: 29px;
+}

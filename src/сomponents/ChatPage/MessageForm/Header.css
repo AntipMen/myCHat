@@ -1,0 +1,26 @@
+.block-chat-header {
+  background-image: linear-gradient(#b5f5ec 20%, #40a9ff 90%, #1890ff);
+  width: 70%;
+  height: 60px;
+  /* border: solid 1px #096dd9; */
+  display: flex
+}
+/* .block-helper-header {
+  background-image: linear-gradient(#b5f5ec 20%, #40a9ff 90%, #1890ff);
+  width: 20%;
+  height: 60px;
+  border: solid 1px #096dd9;
+  display: block;
+} */
+
+.nav-button {
+  height: 10%;
+  width: 10%;
+}
+.block-bar {
+  background-color: red;
+  text-align: center;
+  width: 50px;
+  padding: 10px;
+  color: white;
+}

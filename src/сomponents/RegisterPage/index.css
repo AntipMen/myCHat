@@ -1,0 +1,10 @@
+.RegistForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 91vh;
+}
+
+.RegistForm p {
+  text-align: center;
+}
