@@ -1,20 +1,28 @@
 .main-block {
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  flex: 1 0 auto;
 }
 .block-users-list {
   display: flex;
-  width: 20%;
+  width: 350px;
   height: 100vh;
   flex-direction: column;
   background-color: cornsilk;
+  position: fixed;
+  left: 0;
+  top: 60px;
 }
 .block-chat {
-  display: flex;
-  width: 80%;
-  height: 100vh;
+  max-width: 100%;
+  max-height: 90vh;
   flex-direction: column;
+  position: fixed;
+  left: 350px;
+  top: 60px;
+  right: 0;
+  bottom: 50px;
 }
 .block-helper {
   display: flex;
@@ -31,15 +39,7 @@
   align-items: center;
   justify-content: space-between;
 } */
-.header {
-  display: flex;
-  justify-content: space-between;
-  max-width: 2000px;
-  height: 60px;
-  margin: 0;
-  background-image: linear-gradient(#b5f5ec 20%, #40a9ff 90%, #1890ff);
-  border: solid 1px #096dd9;
-}
+
 .nav-button {
   height: 10%;
   width: 10%;

@@ -1,45 +1,35 @@
 import React, { Component } from "react";
 import "./Header.css";
-import {RightBar} from "../RightBar/RightBar"
+import "antd/dist/antd.css";
+import { Button } from "antd";
+import { UserAddOutlined } from "@ant-design/icons";
 
+import { connect } from "react-redux";
+import { CContactsModal } from "./contactModal";
 
-export const NavigationCenterBar = () => (
-  <div className="block-chat-header">
-    <div>Name chat</div>
-    <div>Menu</div>
-   {/* // <Page /> */}
-  </div>
-);
+const HeaderChat = ({ chats, id }) => {
+  var chatId = chats
+    ? Object.values(chats).find((chat) => chat._id === id)
+    : {};
+  console.log(chatId);
+  return (
+    <>
+      {chatId ? (
+        <div className="block-chat-header">
+          <div>{chatId.title}</div>
+          <span>{chatId.members.length} members</span>
+          <div>
+            <CContactsModal />
+          </div>
+        </div>
+      ) : (
+        <span>Welcome to myChat!</span>
+      )}{" "}
+    </>
+  );
+};
 
-// const NavigationBar = (props) => {
-//   if (!props.warn) {
-//     return null;
-//   }
-//   return <div className="block-bar">Warning!</div>;
-// };
-
-// class Page extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = { showWarning: false };
-//     this.handleToggleClick = this.handleToggleClick.bind(this);
-//   }
-
-//   handleToggleClick() {
-//     this.setState((prevState) => ({
-//       showWarning: !prevState.showWarning,
-//     }));
-//   }
-
-//   render() {
-//     return (
-//       <div>
-//         <NavigationBar warn={this.state.showWarning} />
-//         <button className="nav-button" onClick={this.handleToggleClick}>
-//           {this.state.showWarning ? "Hide" : "Show"}
-//         </button>
-//       </div>
-//     );
-//   }
-// }
-
+export const CHeaderChat = connect((state) => ({
+  chats: state.chats,
+  id: state.router && state.router.match && state.router.match.params._id,
+}))(HeaderChat);

@@ -5,6 +5,7 @@ import promiseReducer from "./PromiseReducer";
 import chatsReducer from "./chatsReducer";
 import { searchReducer } from "./searchReducer";
 import createSagaMiddleware from "redux-saga";
+import routerReducer from "./routerReducer";
 
 export const sagaMiddleware = createSagaMiddleware();
 
@@ -13,6 +14,7 @@ const reducers = combineReducers({
   promise: promiseReducer,
   chats: chatsReducer,
   search: searchReducer,
+  router: routerReducer
 });
 
 export const store = createStore(

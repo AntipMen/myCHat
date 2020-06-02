@@ -1,13 +1,13 @@
 import React from "react";
 import "./ChatList.css";
-import Modal from "./Modal/Modal";
+import { CModal } from "./Modal/Modal";
 //import { SearchInput } from "./SearchComponent";
 import { SearchInput } from "../../../saga";
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 
-const NavigationLeftBar = () => (
+export const NavigationLeftBar = () => (
   <div className="block-user-header">
-    <Modal />
+    <CModal />
     <div>
       <span class="fa fa-address-book-o" aria-hidden="true">
         <SearchOutlined />
@@ -16,5 +16,3 @@ const NavigationLeftBar = () => (
     </div>
   </div>
 );
-
-export default NavigationLeftBar;

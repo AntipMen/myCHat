@@ -14,6 +14,7 @@ export const RightBar = (props) => {
 };
 
 export const Nav = (props) => {
+  console.log(props)
   if (!props.warn) {
     return null;
   }

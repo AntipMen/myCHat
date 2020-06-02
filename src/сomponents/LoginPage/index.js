@@ -8,7 +8,14 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { actionFetch } from "../../reducers/PromiseReducer";
 import { GQL } from "../../graphQL";
-import { actionAuthLogin } from "../../actions";
+import {
+  actionAuthLogin,
+  actionChatList,
+  actionSaveChat,
+  actionUser,
+} from "../../actions";
+import { store } from "../../reducers";
+import { Pending } from "../../helpers";
 
 class LoginForm extends Component {
   state = {
@@ -77,6 +84,7 @@ class LoginForm extends Component {
 }
 
 export function actionLogin(login, password) {
+  //debugger;
   return async (dispatch) => {
     let token = await dispatch(
       actionFetch(
@@ -89,10 +97,11 @@ export function actionLogin(login, password) {
         )
       )
     );
-
     dispatch(actionAuthLogin(token.data.login));
   };
 }
+store.dispatch(actionChatList(store.getState()));
+store.dispatch(actionUser(store.getState()));
 
 const mapStateToProps = (state) => ({
   login: state.auth.data && state.auth.data.sub.login,
@@ -103,7 +112,9 @@ const UserName = ({ login }) =>
 
 export const CUserName = connect(mapStateToProps)(UserName);
 
-export const CLoginForm = connect(null, { onLogin: actionLogin })(LoginForm);
+export const CLoginForm = connect(null, {
+  onLogin: actionLogin,
+})(LoginForm);
 
 // const CLog = connect((state) => ({ cart: state.cart }), {
 //   onLogin: actionAuthLogin,

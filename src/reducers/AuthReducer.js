@@ -1,4 +1,5 @@
 import * as jwt_decode from "jwt-decode";
+import { store } from ".";
 
 export default function authReducer(state, action) {
   if (!state) {
@@ -20,6 +21,5 @@ export default function authReducer(state, action) {
     localStorage.setItem("authToken", "");
     return {};
   }
-
   return state;
 }

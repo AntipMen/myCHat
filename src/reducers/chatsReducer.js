@@ -1,14 +1,20 @@
+import { store } from ".";
+
 export default function chatsReducer(state, { type, payload, message }) {
+  //debugger
   if (!state) {
     return {};
   }
-
+  // if (type === "AUTH_LOGIN") {
+  //   type = "SAVE_CHATS";
+  // }
   if (type === "SAVE_CHATS") {
+    console.log(payload)
     for (let chat of payload) {
-      var chatMessages = chat.messages.reduce((list, mes) => {
+      var chatMessages = chat.messages ? chat.messages.reduce((list, mes) => {
         list[mes._id] = mes;
         return list;
-      }, {});
+      }, {}) : []
       chat.messages = chatMessages;
     }
     const chats = payload;
@@ -34,5 +40,10 @@ export default function chatsReducer(state, { type, payload, message }) {
       ...state,
     };
   }
+
+  if (type === "AUTH_LOGOUT") {
+    return {};
+  }
+
   return state;
 }

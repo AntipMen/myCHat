@@ -1,7 +1,7 @@
 .chats-list {
   display: flex;
   flex-direction: column;
-  height: 90vh;
+  max-height: 100%;
   padding: 10px;
   border: solid 1px #096dd9;
   overflow-y: scroll;
@@ -35,7 +35,7 @@
 }
 .block-user-header {
   background-image: linear-gradient(#b5f5ec 20%, #40a9ff 90%, #1890ff);
-  width: 20%;
+  width: 350px;
   height: 60px;
   border: solid 1px #096dd9;
   display: flex;
@@ -59,4 +59,24 @@ span.fa {
 span.fa + input {
   padding-left: 26px;
 }
-
+.create-chat {
+  display: flex;
+  height: 50px;
+  border: solid 1px black;
+}
+.block-user-info {
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  width: 800px;
+  margin-left: 350px;
+  background: url("./bouncerate.jpg") top center;
+  border-radius: 20px;
+}
+.block-close {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

@@ -11,23 +11,9 @@ import { connect } from "react-redux";
 export default class Modal extends React.Component {
   state = {
     isOpen: false,
-    loadings: [],
-  };
-
-  enterLoading = (index) => {
-    const newLoadings = [...this.state.loadings];
-    newLoadings[index] = true;
-    this.setState({
-      loadings: newLoadings,
-    });
-    setTimeout(() => {
-      newLoadings[index] = false;
-      this.setState({ loadings: newLoadings });
-    }, 6000);
   };
 
   render() {
-    const { loadings } = this.state;
     return (
       <React.Fragment>
         <Button
@@ -38,27 +24,35 @@ export default class Modal extends React.Component {
 
         {this.state.isOpen && (
           <div className="modal">
+            <div className="close">
+              {" "}
+              <Button
+                type="primary"
+                icon={<CloseOutlined />}
+                onClick={() => this.setState({ isOpen: false })}
+              />
+            </div>
             <div className="modal-body">
-              <div className="close">
+              <div className="modal-avatar">
                 {" "}
-                <Button
-                  type="primary"
-                  icon={<CloseOutlined />}
-                  loading={loadings[2]}
-                  onClick={() => this.setState({ isOpen: false })}
+                <img
+                  src={
+                    this.props.user.avatar &&
+                    `http://chat.fs.a-level.com.ua/${this.props.user.avatar.url}`
+                  }
+                  width="200px"
                 />
               </div>
-              <div className="modal-user-info"></div>
+              <div className="modal-user-info">
+                <h1>{this.props.user.login}</h1>
+              </div>
               <div className="modal-navigation"></div>
-
-              <div className="modal-about"></div>
-
-              <CLogoutButton className="ant-btn ant-btn-primary">
-                <Link to="/">
-                  <PoweroffOutlined /> Log out
-                </Link>
-              </CLogoutButton>
             </div>
+            <CLogoutButton className="ant-btn ant-btn-primary">
+              <Link to="/">
+                <PoweroffOutlined /> Log out
+              </Link>
+            </CLogoutButton>
           </div>
         )}
       </React.Fragment>
@@ -69,3 +63,10 @@ export default class Modal extends React.Component {
 const CLogoutButton = connect((state) => ({ disabled: !state.auth.data }), {
   onClick: actionAuthLogout,
 })(Button);
+
+export const CModal = connect((state) => ({
+  user:
+    state.promise.user &&
+    state.promise.user.payload &&
+    state.promise.user.payload.data.UserFind[0],
+}))(Modal);

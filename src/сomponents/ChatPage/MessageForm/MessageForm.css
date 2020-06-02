@@ -1,28 +1,33 @@
 .block-chat-main {
   display: flex;
-  height: 100vh;
+  max-height: 100%;
   flex-direction: column;
   justify-content: space-around;
   background-image: linear-gradient(#b5f5ec 20%, #40a9ff 90%, #1890ff);
+  margin-bottom: 50px;
 }
-.chat-message-list {
+.chat-messages-list {
   display: flex;
   flex-direction: column;
+  height: 800px;
+  max-height: 100%;
+  padding: 10px;
   overflow-y: scroll;
+  justify-content: flex-end;
 }
 
-.chat-message-list::-webkit-scrollbar-track {
+.chat-messages-list::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #f5f5f5;
   border-radius: 10px;
 }
 
-.chat-message-list::-webkit-scrollbar {
+.chat-messages-list::-webkit-scrollbar {
   width: 10px;
   background-color: #f5f5f5;
 }
 
-.chat-message-listt::-webkit-scrollbar-thumb {
+.chat-messages-list::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-image: -webkit-gradient(
     linear,
@@ -37,11 +42,39 @@
 .chat-message-form {
   display: flex;
   background-color: cadetblue;
-  height: 40px;
+  height: 50px;
+  flex: 0 0 auto;
+  position: fixed;
+  left: 350px;
+  bottom: 0;
+  right: 0;
+  margin-top: 10px;
+}
+/* .chat-messages-list .message {
+
+} */
+.message {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 15px;
+}
+.partner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 15px;
 }
 
-.message {
-  margin: 15px 0;
+.partner .message-text {
+  background: #b37feb;
+  color: white;
+  display: flex;
+  max-height: 500px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  max-width: 400px;
+  flex-direction: column;
 }
 
 .message .message-username {
@@ -53,16 +86,24 @@
 .message .message-text {
   background: #5ea3d0;
   color: white;
-  display: inline;
+  display: flex;
+  max-height: 300px;
   padding: 4px 8px;
   border-radius: 8px;
+  max-width: 400px;
+  flex-direction: column;
 }
 
-.chat-message-list {
+/* .chat-messages-list {
   box-sizing: border-box;
   padding-left: 6px;
   width: 100%;
   height: 100%;
   overflow-y: scroll;
   background: white;
+} */
+.block-emoji {
+  position: absolute;
+  bottom: 50px;
+  z-index: 1;
 }
