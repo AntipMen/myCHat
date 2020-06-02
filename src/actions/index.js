@@ -87,7 +87,7 @@ export function actionChatList(store) {
         { owner: owner }
       )
     );
-  }
+  } return {}
 }
 
 export function actionUser(user) {
