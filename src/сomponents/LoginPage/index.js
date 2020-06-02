@@ -100,7 +100,8 @@ export function actionLogin(login, password) {
     dispatch(actionAuthLogin(token.data.login));
   };
 }
-store.dispatch(actionChatList(store.getState()));
+if (store.auth.jwt) {
+            store.dispatch(actionChatList(store.getState()))} return {}
 store.dispatch(actionUser(store.getState()));
 
 const mapStateToProps = (state) => ({
