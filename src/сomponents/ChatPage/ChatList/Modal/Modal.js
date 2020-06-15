@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import "./Modal.css";
 import { MenuOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
@@ -8,7 +8,7 @@ import { actionAuthLogout } from "../../../../actions";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-export default class Modal extends React.Component {
+export default class Modal extends Component {
   state = {
     isOpen: false,
   };
@@ -20,8 +20,8 @@ export default class Modal extends React.Component {
           onClick={() => this.setState({ isOpen: true })}
           type="primary"
           icon={<MenuOutlined />}
+          style={{ backgroundColor: "#69c0ff" }}
         />
-
         {this.state.isOpen && (
           <div className="modal">
             <div className="close">
@@ -41,6 +41,7 @@ export default class Modal extends React.Component {
                     `http://chat.fs.a-level.com.ua/${this.props.user.avatar.url}`
                   }
                   width="200px"
+                  alt="avatar"
                 />
               </div>
               <div className="modal-user-info">
@@ -60,9 +61,12 @@ export default class Modal extends React.Component {
   }
 }
 
-const CLogoutButton = connect((state) => ({ disabled: !state.auth.data }), {
-  onClick: actionAuthLogout,
-})(Button);
+const CLogoutButton = connect(
+  (state) => ({ disabled: !state.auth.data, style: { height: "50px" } }),
+  {
+    onClick: actionAuthLogout,
+  }
+)(Button);
 
 export const CModal = connect((state) => ({
   user:

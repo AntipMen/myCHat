@@ -1,40 +1,27 @@
 import React, { useState } from "react";
 import "./ChatList.css";
 import "antd/dist/antd.css";
-import { Form, Input, Button, Checkbox } from "antd";
-import {
-  UserAddOutlined,
-  CloseOutlined,
-  DownloadOutlined,
-} from "@ant-design/icons";
+import { Input, Button } from "antd";
+import { CloseOutlined, DownloadOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { LeftNavigation } from "./ChatList";
-import { actionCreateNewChat } from "../../../actions";
-import { MainPage, Pending } from "../../../helpers";
+import { Pending } from "../../../helpers";
+import { actionCreateNewChat, actionChatList } from "../../../actions";
+import { store } from "../../../reducers";
 
-const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
-
-export const UserInfo = ({ users, id, auth, onCreate, newchat, min = 2 }) => {
+export const UserInfo = ({ users, id, auth, onCreate, min = 2, onLoading }) => {
   const [chatName, setChatName] = useState("");
   var error = {
     avatar: {
       _id: "5ed61ab0781b8d11e0707b4c",
       url: "images/5b07e2379e89c452787fba095ba6d0b0",
     },
-    login: "Try again",
+    login: "Try again...",
     _id: "error",
   };
 
   var userId = users ? users.find((user) => user._id === id) : error;
-  console.log(userId);
 
   const valid = !(chatName.length < min);
   return (
@@ -44,21 +31,31 @@ export const UserInfo = ({ users, id, auth, onCreate, newchat, min = 2 }) => {
         <div className="block-close">
           {" "}
           <Link to="/mychat">
-            <Button type="primary" icon={<CloseOutlined />} />
+            <Button
+              type="primary"
+              onClick={() => onLoading(store.getState())}
+              icon={<CloseOutlined />}
+            />
           </Link>
         </div>
         {userId ? (
           <>
             <div className="block-body">
               <div className="block-user-avatar">
-                {" "}
-                <img
-                  src={
-                    userId.avatar &&
-                    `http://chat.fs.a-level.com.ua/${userId.avatar.url}`
-                  }
-                  width="200px"
-                />
+                {userId.avatar != null ? (
+                  <img
+                    src={
+                      userId.avatar &&
+                      `http://chat.fs.a-level.com.ua/${userId.avatar.url}`
+                    }
+                    width="250px"
+                    alt="avatar"
+                  />
+                ) : (
+                  <span className="circle">
+                    <h1>{userId.login.slice(0, 1)}</h1>
+                  </span>
+                )}
               </div>
               <div className="block-user-login">
                 <h1>{userId.login}</h1>
@@ -78,10 +75,10 @@ export const UserInfo = ({ users, id, auth, onCreate, newchat, min = 2 }) => {
                     <Button
                       type="primary"
                       icon={<DownloadOutlined />}
-                      onClick={() => onCreate(chatName, userId, auth)}
+                      onClick={() => onCreate(userId, auth, chatName)}
                       disabled={!valid}
                     >
-                      <Link to={`/chat/${newchat._id}`}>Create New Chat</Link>
+                      Create New Chat
                     </Button>
                   </div>{" "}
                 </>
@@ -101,10 +98,9 @@ export const CUserInfo = connect(
     users: state.search.result,
     id: state.router.match.params._id,
     auth: state.auth.data.sub.id,
-    newchat: state.chats,
   }),
   {
-    onCreate: () => console.log("value"),
-    // actionCreateNewChat
+    onCreate: actionCreateNewChat,
+    onLoading: actionChatList,
   }
 )(UserInfo);

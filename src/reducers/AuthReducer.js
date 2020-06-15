@@ -1,5 +1,4 @@
 import * as jwt_decode from "jwt-decode";
-import { store } from ".";
 
 export default function authReducer(state, action) {
   if (!state) {
@@ -15,11 +14,17 @@ export default function authReducer(state, action) {
     const jwt = action.token;
     const data = jwt_decode(jwt);
     localStorage.setItem("authToken", jwt);
-    return { jwt: jwt, data: data };
+    return { jwt: jwt, data: data, status: "online" };
   }
   if (action.type === "AUTH_LOGOUT") {
     localStorage.setItem("authToken", "");
-    return {};
+    return { status: "offline" };
+  }
+  if (action.type === "INVALID_LOGIN") {
+    return "Invalid login or password";
+  }
+  if (action.type === "INVALID_PASSWORD") {
+    return action.message;
   }
   return state;
 }

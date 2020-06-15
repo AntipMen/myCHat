@@ -1,6 +1,5 @@
 import React from "react";
 import boyDog from "./boyDog.svg";
-//import logo from "../logo.svg";
 import "./index.css";
 
 export const Pending = () => (

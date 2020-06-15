@@ -1,6 +1,5 @@
 import { actionFetch } from "../reducers/PromiseReducer";
 import { GQL } from "../graphQL";
-import { store } from "../reducers";
 
 export const actionAuthLogin = (token) => ({ type: "AUTH_LOGIN", token });
 export const actionAuthLogout = () => ({ type: "AUTH_LOGOUT" });
@@ -10,6 +9,7 @@ export const actionSearchResult = (result) => ({
   type: "SEARCH_RESULT",
   result,
 });
+export const actionCleanResult = () => ({ type: "CLEAN_RESULT" });
 
 export const actionPending = (key, promise) => {
   return {
@@ -36,93 +36,127 @@ export const actionRejected = (key, error) => {
   };
 };
 
+export const actionCleanPromise = () => ({ type: "AUTH_LOGOUT" });
+
 export const actionSaveChat = (payload) => ({ type: "SAVE_CHATS", payload });
 export const actionSaveMes = (message) => ({
   type: "SAVE_MESSAGE",
   message,
 });
 
+export const actionInvalidPassword = ({ message }) => ({
+  type: "INVALID_PASSWORD",
+  message,
+});
+
+export const actionInvalidLogin = ({ message }) => ({
+  type: "INVALID_LOGIN",
+  message,
+});
+
 export function actionChatList(store) {
-  //debugger
-  console.log(store);
-  if (store.auth.jwt) {
-    const id = store.auth.data.sub.id;
-    let owner = JSON.stringify([
-      { "members._id": id },
-      { sort: [{ _id: -1 }] },
-    ]);
-    return actionPending(
-      "chats",
-      GQL(
-        `query ChatF($owner: String){
-            ChatFind(query: $owner) {
+  const id = store.auth.data.sub.id;
+  let owner = JSON.stringify([{ "members._id": id }, { sort: [{ _id: -1 }] }]);
+  return actionPending(
+    "chats",
+    GQL(
+      `query ChatF($owner: String){
+        ChatFind(query: $owner) {
+          _id
+          avatar {
+            url
+          }
+          owner {
+            login
+          }
+          title
+          members {
+            login
+            _id
+          }
+          messages {
+            _id
+            createdAt
+            text
+            replies {
               _id
-            
+              createdAt
+              text
+            }
+            replyTo {
+              _id
+              createdAt
+              text
+              owner{
+                login
+                _id
+            }
+            }
+            forwarded {
+              _id
+              createdAt
+              text
               owner {
                 login
               }
-              title
-              members {
-                login
-                _id
-              }
-              messages {
-                _id
-                createdAt
-                text
-                media {
-                  url
-                  _id
-                  
-                }
-                chat {
-                  title
-                }
-                owner {
-                  login
-                }
-              }
             }
-          }`,
-        { owner: owner }
-      )
-    );
-  }
-}
-
-export function actionUser(user) {
-  //debugger;
-  console.log(user);
-  if (user.auth.data !== undefined) {
-    const id = user.auth.data.sub.id;
-    let userId = JSON.stringify([{ _id: id }]);
-    return async (dispatch) => {
-      let user = await dispatch(
-        actionFetch(
-          "user",
-          GQL(
-            ` query user($q: String){
-            UserFind(query: $q){
+            forwardWith {
               _id
               createdAt
-              login
-              nick
-              acl
-              avatar {
-                _id
-                url
+              text
+              owner {
+                login
               }
-                }
+            }
+            media {
+              url
+              _id
+            }
+            chat {
+              title
+            }
+            owner {
+              login
+              avatar {
+                url
+                _id
+              }
+            }
           }
-          `,
-            { q: userId }
-          )
-        )
-      );
-    };
-  }
+        }
+      }`,
+      { owner: owner }
+    )
+  );
 }
-//store.dispatch(actionUser(store.getState()));
+
+// export function actionUser(user) {
+//   debugger
+//   if (user.auth.data !== undefined) {
+//     const id = user.auth.data.sub.id;
+//     let userId = JSON.stringify([{ _id: id }]);
+//     return actionPending(
+//       "user",
+//       GQL(
+//         ` query user($q: String){
+//             UserFind(query: $q){
+//               _id
+//               createdAt
+//               login
+//               nick
+//               acl
+//               avatar {
+//                 _id
+//                 url
+//               }
+//                 }
+//           }
+//           `,
+//         { q: userId }
+//       )
+//     );
+//   }
+// }
 
 export function actionCreateMessage(value, id) {
   return async (dispatch) => {
@@ -139,6 +173,10 @@ export function actionCreateMessage(value, id) {
               }){
               _id
               text
+              media {
+                url
+                _id
+              }
               owner {
               login
               }
@@ -151,15 +189,7 @@ export function actionCreateMessage(value, id) {
   };
 }
 
-// store.dispatch(actionCreateMessage());
-
-export function actionMedia(json, id) {
-  //debugger;
-  console.log(id, json);
-
-  let mediaId = json._id;
-  let chatId = id;
-
+export function actionMedia(value, mediaId, chatId) {
   return async (dispatch) => {
     let newmesmedia = await dispatch(
       actionFetch(
@@ -167,16 +197,20 @@ export function actionMedia(json, id) {
         GQL(
           `mutation MesRedAll{
                 MessageUpsert (message: {
-                text: ""
-                media: {
+                text: \"${value}\"
+                media: [{
                     _id: \"${mediaId}\"
-                      }
+                      }]
                 chat: {
                 _id: \"${chatId}\"
                 }
                 }){
                 _id
                 text
+                media {
+                  url
+                  _id
+                }
                 owner {
                 login
                 }
@@ -187,11 +221,8 @@ export function actionMedia(json, id) {
     );
   };
 }
-//  store.dispatch(actionMedia(store.getState()));
 
 export function actionCreateNewChat(userId, auth, chatName) {
-  //debugger;
-  console.log(userId, auth, chatName);
   return async (dispatch) => {
     let newchat = await dispatch(
       actionFetch(
@@ -224,12 +255,10 @@ export function actionCreateNewChat(userId, auth, chatName) {
 }
 
 export function actionAllUsers() {
-  return async (dispatch) => {
-    let allusers = await dispatch(
-      actionFetch(
-        "allusers",
-        GQL(
-          `query user{
+  return actionPending(
+    "users",
+    GQL(
+      `query user{
             UserFind(query: "[{}]"){
               _id
               login
@@ -241,9 +270,112 @@ export function actionAllUsers() {
                 }
           }
           `
+    )
+  );
+}
+
+export function actionAddMembers(chatId, newUser, members) {
+  let allusers = [...members, newUser];
+
+  var newMembers = [];
+  for (var i = 0; i < allusers.length; ++i) {
+    newMembers[i] = { _id: allusers[i] };
+  }
+
+  return async (dispatch) => {
+    let updatechat = await dispatch(
+      actionFetch(
+        "updatechat",
+        GQL(
+          `mutation NewMembers($membersList:[UserInput]){
+            ChatUpsert(chat: {
+            _id:  \"${chatId}\"
+            members: $membersList
+            }) {
+              _id
+              createdAt
+              title
+              media {
+                url
+                _id
+              }
+              members {
+                login
+                _id
+              }
+            }
+          }`,
+          { membersList: newMembers }
         )
       )
     );
   };
 }
-store.dispatch(actionAllUsers());
+
+export function actionReply(value, chatId, messageId) {
+  return async (dispatch) => {
+    let replymes = await dispatch(
+      actionFetch(
+        "replymes",
+        GQL(
+          `mutation reply{
+            MessageUpsert(message: {
+              chat: {
+                _id: \"${chatId}\"
+              }
+                text: \"${value}\"
+              replyTo: {
+                _id: \"${messageId}\"
+              
+              }
+            }
+            ) {
+              _id
+              createdAt
+              text
+              media {
+                url
+                _id
+              }
+            }
+          }`
+        )
+      )
+    );
+  };
+}
+
+export function actionForward(value, chatId, messageId) {
+  debugger;
+  return async (dispatch) => {
+    let forwardmes = await dispatch(
+      actionFetch(
+        "forward",
+        GQL(
+          `mutation forward{
+            MessageUpsert(message: {
+              chat:{
+                _id: \"${chatId}\"
+              }
+              text: \"${value}\"
+              forwarded: {
+                _id: \"${messageId}\"
+              }
+            }) {
+              _id
+              createdAt
+              text
+              media {
+                url
+                _id
+              }
+              owner {
+                login
+              }
+            }
+          }`
+        )
+      )
+    );
+  };
+}

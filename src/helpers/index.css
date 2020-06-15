@@ -22,10 +22,3 @@
   min-width: 10%;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  max-width: 2000px;
-  height: 60px;
-  margin: 0;
-}

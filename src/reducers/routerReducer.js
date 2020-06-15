@@ -33,17 +33,3 @@ let CRoute = (
 );
 
 export const Route = connect(null, { action: actionRouteToRedux })(CRoute);
-
-// let App = () => (
-//   <Provider store={store}>
-//     <Router history={createHistory()}>
-//       <div>
-//         <Route
-//           path="/chat/:param1/:param2"
-//           component={(p) => <div>CHAT</div>}
-//         />
-//         <Route path="/" component={(p) => <div>MAIN</div>} exact />
-//       </div>
-//     </Router>
-//   </Provider>
-// );

@@ -1,4 +1,4 @@
-import { Form, Input, Button } from "antd";
+import { Button } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import React, { Component } from "react";
 import "antd/dist/antd.css";
@@ -11,20 +11,23 @@ import { GQL } from "../../graphQL";
 import {
   actionAuthLogin,
   actionChatList,
-  actionSaveChat,
   actionUser,
+  actionCleanPromise,
+  actionAllUsers,
+  actionInvalidLogin,
 } from "../../actions";
 import { store } from "../../reducers";
-import { Pending } from "../../helpers";
+import { CInvalidMessageForSignIn } from "../RegisterPage/valid";
 
 class LoginForm extends Component {
-  state = {
-    login: "",
-    password: "",
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      login: "",
+      password: "",
+    };
+  }
   render() {
-    const valid = true;
-
     return (
       <div className="main-block">
         <div className="block-login">
@@ -41,7 +44,6 @@ class LoginForm extends Component {
                   value={this.state.login}
                   prefix={<UserOutlined className="site-form-item-icon" />}
                   placeholder="Login..."
-                  value={this.state.login}
                   onChange={(e) => this.setState({ login: e.target.value })}
                 />
               </div>
@@ -55,13 +57,14 @@ class LoginForm extends Component {
                   prefix={<LockOutlined className="site-form-item-icon" />}
                   type="password"
                   placeholder="Password..."
-                  value={this.state.password}
                   onChange={(e) => this.setState({ password: e.target.value })}
                 />
               </div>
             </div>
           </form>
           <div className="block-login-button">
+            <CInvalidMessageForSignIn />
+
             <Button
               type="primary"
               htmlType="submilogin-formt"
@@ -73,7 +76,12 @@ class LoginForm extends Component {
               <Link to="/mychat">Sign in</Link>
             </Button>
             <span>New to MyChat?</span>
-            <Button type="primary" htmlType="submit" className="registr-button">
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="registr-button"
+              style={{ backgroundColor: "#b37feb" }}
+            >
               <Link to="/registration"> Create an account</Link>
             </Button>
           </div>
@@ -84,24 +92,35 @@ class LoginForm extends Component {
 }
 
 export function actionLogin(login, password) {
-  //debugger;
   return async (dispatch) => {
-    let token = await dispatch(
-      actionFetch(
-        "login",
-        GQL(
-          `query login($login: String, $password: String){
-            login(login: $login, password: $password)
-        }`,
-          { login, password }
+    try {
+      let token = await dispatch(
+        actionFetch(
+          "login",
+          GQL(
+            `query login($login: String, $password: String){
+          login(login: $login, password: $password)
+      }`,
+            { login, password }
+          )
         )
-      )
-    );
-    dispatch(actionAuthLogin(token.data.login));
+      );
+      dispatch(actionAuthLogin(token.data.login));
+      dispatch(actionChatList(store.getState()));
+      // dispatch(actionUser(store.getState()));
+    } catch (e) {
+      dispatch(actionInvalidLogin(e));
+    }
   };
 }
-store.dispatch(actionChatList(store.getState()));
-store.dispatch(actionUser(store.getState()));
+
+if (store.getState().auth.jwt) {
+  store.dispatch(actionChatList(store.getState()));
+  // store.dispatch(actionUser(store.getState()));
+  store.dispatch(actionAllUsers());
+} else {
+  store.dispatch(actionCleanPromise());
+}
 
 const mapStateToProps = (state) => ({
   login: state.auth.data && state.auth.data.sub.login,
@@ -115,8 +134,3 @@ export const CUserName = connect(mapStateToProps)(UserName);
 export const CLoginForm = connect(null, {
   onLogin: actionLogin,
 })(LoginForm);
-
-// const CLog = connect((state) => ({ cart: state.cart }), {
-//   onLogin: actionAuthLogin,
-//   onLogout: actionAuthLogout,
-// })(LoginForm);

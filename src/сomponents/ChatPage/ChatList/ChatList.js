@@ -1,40 +1,53 @@
-import React, { useMemo } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import "./ChatList.css";
 import { Pending } from "../../../helpers";
-import { actionAllMessages, actionChatList } from "../../../actions";
-import { MessagesList } from "../MessageForm/MessageForm";
-
 import { CSearchResult } from "../../../saga";
+import { CMessagesList } from "../MessageForm/MessageForm";
+import { Avatar, Badge } from "antd";
 
-const ChatList = ({ chats, ...props }) =>
-  chats ? (
+const ChatList = ({ chats, router }) => {
+  return chats ? (
     <>
       <div className="chats-list">
         {Object.values(chats).map((chat) => (
-          <div className="chat" key={chat._id} chat={chat}>
-            <Link to={`/chat/${chat._id}`}>
-              {chat.title}
-              {/* {chat._id.length > 1 ? `${chat.title}` : null} */}
-            </Link>
-          </div>
+          <Link to={`/chat/${chat._id}`} key={chat._id}>
+            {" "}
+            <div
+              className={chat._id === router ? "selected-chat" : "chat"}
+              key={chat._id}
+              chat={chat}
+            >
+              {chat.avatar != null ? (
+                <img
+                  src={
+                    chat.avatar &&
+                    `http://chat.fs.a-level.com.ua/${chat.avatar.url}`
+                  }
+                  width="50px"
+                  alt="avatar"
+                />
+              ) : (
+                <span className="circle-min-chat">
+                  {chat.title ? <h1>{chat.title.slice(0, 1)}</h1> : ""}
+                </span>
+              )}
+              <h3>{chat.title}</h3>
+            </div>{" "}
+          </Link>
         ))}
       </div>
     </>
   ) : (
     <Pending />
   );
+};
 
 export const CChatList = connect((state) => ({
   chats: state.chats,
+  router: state.router.match.params._id,
 }))(ChatList);
-
-export const CreateNewChat = () => (
-  <div className="create-chat">
-    <button>Create New Chat</button>
-  </div>
-);
 
 export const LeftNavigation = () => (
   <div className="block-users-list">

@@ -1,6 +1,10 @@
 import React, { useRef } from "react";
-import { actionMedia, actionCreateMessage } from "../../../actions";
+import { actionMedia } from "../../../actions";
 import { connect } from "react-redux";
+
+import { Button } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
+import { actionMediaMessage } from "../../../reducers/messageReducer";
 
 const Upload = ({
   onUpload = () => {
@@ -24,7 +28,7 @@ const Upload = ({
   );
 };
 
-export const Media = ({ id, onPush }) => {
+export const Media = ({ id, onPush, onMedia }) => {
   var media;
   return (
     <div className="App">
@@ -38,13 +42,21 @@ export const Media = ({ id, onPush }) => {
             body: formData,
           })
             .then((res) => res.json())
-            .then((json) => (media = json))
+            .then((json) => onMedia(json))
         }
-      />
-
-      <button onClick={() => onPush(media, id)}>file send</button>
+      >
+        <Button
+          type="primary"
+          shape="round"
+          icon={<DownloadOutlined />}
+          onClick={() => onPush(media, id)}
+        />
+      </Upload>
     </div>
   );
 };
 
-export const CMedia = connect(null, { onPush: actionMedia })(Media);
+export const CMedia = connect(null, {
+  onPush: actionMedia,
+  onMedia: actionMediaMessage,
+})(Media);

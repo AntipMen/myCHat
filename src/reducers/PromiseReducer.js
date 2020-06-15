@@ -5,6 +5,9 @@ export default function promiseReducer(state, { type, key, ...action }) {
   if (type === "PROMISE") {
     return { ...state, [key]: action };
   }
+  if (type === "AUTH_LOGOUT") {
+    return {};
+  }
   return state;
 }
 
@@ -31,7 +34,6 @@ export const actionFetch = (key, promise) => {
     };
   };
   return async (dispatch) => {
-    //возвращаем функцию.
     dispatch(actionPending());
     try {
       let resolved = await promise;

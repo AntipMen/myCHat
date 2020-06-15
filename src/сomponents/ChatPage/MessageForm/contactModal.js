@@ -1,88 +1,100 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Header.css";
-import {
-  UserAddOutlined,
-  CloseOutlined,
-  UsergroupAddOutlined,
-} from "@ant-design/icons";
+import { UserAddOutlined, UsergroupAddOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
-import { Button, Input } from "antd";
-import { Link } from "react-router-dom";
+import { Modal, Button } from "antd";
 import { connect } from "react-redux";
-import { actionAllUsers } from "../../../actions";
+import { actionAddMembers, actionSaveChat } from "../../../actions";
 import { Pending } from "../../../helpers";
 
-export default class ContactsModal extends React.Component {
-  state = {
-    isOpen: false,
-    value: "",
+export const ContactsModal = ({ chats, params, allusers, onAdd }) => {
+  const [visible, setVisible] = useState(false);
+
+  const showModal = () => {
+    setVisible(true);
   };
 
-  render() {
-    {
-      console.log(this.props.allusers);
-    }
+  const handleCancel = () => {
+    setVisible(false);
+  };
+  const chatId = Object.values(chats).find((chat) => chat._id === params);
+  let members = chatId.members.map((id) => id._id);
 
-    return (
-      <React.Fragment>
-        <Button
-          onClick={() => this.setState({ isOpen: true })}
-          type="primary"
-          icon={<UsergroupAddOutlined />}
-        />
-        {this.state.isOpen && (
-          <div className="contacts-modal">
-            <div className="close">
-              <Button
-                type="primary"
-                icon={<CloseOutlined />}
-                onClick={() => this.setState({ isOpen: false })}
-              />
-            </div>
-            <div className="contacts-search">
-              <СSearchInput />
-              {this.props.allusers ? (
-                <div className="contacts-list">
-                  {this.props.allusers.map((user) => (
-                    <>
-                      {user.login.length > 1 ? (
-                        <div className="contact">
-                          <h3>
-                            {user.login} ({user.nick})
-                          </h3>
-                          <Button
-                            type="primary"
-                            shape="circle"
-                            icon={<UserAddOutlined />}
+  return (
+    <div>
+      <Button
+        type="primary"
+        onClick={showModal}
+        icon={<UsergroupAddOutlined />}
+        style={{ backgroundColor: "#69c0ff" }}
+      />
+      <Modal
+        visible={visible}
+        title="Add Members"
+        onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Return
+          </Button>,
+        ]}
+      >
+        <div className="contacts-search">
+          {allusers ? (
+            <div className="contacts-list">
+              {allusers.map((user) => (
+                <>
+                  {user.login.length > 1 ? (
+                    <div className="contact">
+                      <div className="user-avatar">
+                        {user.avatar != null ? (
+                          <img
+                            src={
+                              user.avatar &&
+                              `http://chat.fs.a-level.com.ua/${user.avatar.url}`
+                            }
+                            width="50px"
+                            alt="avatar"
                           />
-                        </div>
-                      ) : undefined}
-                    </>
-                  ))}
-                </div>
-              ) : (
-                <Pending />
-              )}
+                        ) : (
+                          <span className="circle-min">
+                            <h1>{user.login.slice(0, 1)}</h1>
+                          </span>
+                        )}
+                      </div>
+                      <h3>
+                        {user.login} ({user.nick})
+                      </h3>
+
+                      <Button
+                        type="primary"
+                        shape="circle"
+                        icon={<UserAddOutlined />}
+                        onClick={() =>
+                          onAdd(params, user._id, members) && handleCancel()
+                        }
+                      />
+                    </div>
+                  ) : undefined}
+                </>
+              ))}
             </div>
-          </div>
-        )}
-      </React.Fragment>
-    );
-  }
-}
+          ) : (
+            <Pending />
+          )}
+        </div>
+      </Modal>
+    </div>
+  );
+};
 
-const СSearchInput = connect(
-  ({ search: { query } }) => ({ value: query, placeholder: "Search..." }),
-  {
-    onChange(event) {
-      //   return actionSearch(event.target.value);
-    },
-  }
-)("input");
-
-export const CContactsModal = connect((state) => ({
-  allusers:
-    state.promise.allusers &&
-    state.promise.allusers.payload &&
-    state.promise.allusers.payload.data.UserFind,
-}))(ContactsModal);
+export const CContactsModal = connect(
+  (state) => ({
+    allusers:
+      state.promise.allusers &&
+      state.promise.allusers.payload &&
+      state.promise.allusers.payload.data.UserFind,
+    params: state.router.match.params._id,
+    chats: state.chats,
+  }),
+  { onAdd: actionAddMembers }
+)(ContactsModal);
