@@ -1,8 +1,6 @@
-import { message } from "antd";
-
 export default function messageReducer(
   state,
-  { type, chatId, replyMessage, forwardMessage, media }
+  { type, chatId, replyMessage, forwardMessage, media, avatar, editMessage }
 ) {
   if (!state) {
     return {};
@@ -15,6 +13,7 @@ export default function messageReducer(
       messageId: replyMessage._id,
       messageText: replyMessage.text,
       messageOwner: replyMessage.owner.login,
+      messageMedia: replyMessage.media,
     };
   }
   if (type === "FORWARD_MESSAGE") {
@@ -25,30 +24,31 @@ export default function messageReducer(
       messageId: forwardMessage._id,
       messageText: forwardMessage.text,
       messageOwner: forwardMessage.owner.login,
+      messageMedia: forwardMessage.media,
+    };
+  }
+  if (type === "EDIT_MESSAGE") {
+    return {
+      ...state,
+      type: "edit",
+
+      messageId: editMessage._id,
+      messageText: editMessage.text,
+      messageOwner: editMessage.owner.login,
+      messageMedia: editMessage.media,
     };
   }
   if (type === "MEDIA_MESSAGE") {
     return { media, type: "media" };
   }
+  if (type === "CHANGE_AVATAR") {
+    return { avatar, type: "avatar" };
+  }
   if (type === "CLEAN_MESSAGE") {
-    debugger;
-
     return { type: "clean" };
+  }
+  if (type === "ERROR_MESSAGE") {
+    return "Error Media";
   }
   return state;
 }
-
-export const actionReplyMessage = (chatId, replyMessage) => ({
-  type: "REPLY_MESSAGE",
-  chatId,
-  replyMessage,
-});
-
-export const actionForwardMessage = (forwardMessage) => ({
-  type: "FORWARD_MESSAGE",
-  forwardMessage,
-});
-
-export const actionCleanMessage = () => ({ type: "CLEAN_MESSAGE" });
-
-export const actionMediaMessage = (media) => ({ type: "MEDIA_MESSAGE", media });

@@ -5,7 +5,15 @@ import { Button } from "antd";
 import { UserAddOutlined, VerticalAlignTopOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { all, takeLatest, takeEvery, put } from "redux-saga/effects";
+import {
+  all,
+  takeLatest,
+  takeEvery,
+  put,
+  call,
+  putResolve,
+  takeLeading,
+} from "redux-saga/effects";
 import {
   actionSearch,
   actionSearchResult,
@@ -13,10 +21,15 @@ import {
   actionResolved,
   actionSaveChat,
   actionCleanResult,
+  actionSaveUsers,
+  actionUserChange,
+  actionMediaMessage,
+  actionErrorMessage,
+  actionChangeAvatar,
 } from "../actions";
 import { sagaMiddleware } from "../reducers";
 import { GQL } from "../graphQL";
-import { actionSaveUsers } from "../reducers/usersReducer";
+import { getMediaFile } from "../сomponents/ChatPage/MessageForm/upload/index";
 
 const delay = (ms) => new Promise((ok) => setTimeout(() => ok(ms), ms));
 
@@ -59,6 +72,11 @@ function* fetchWorker({ key, promise, status }) {
         yield put(actionSaveChat(payload.data.ChatFind));
       } else if (payload.data.UserFind) {
         yield put(actionSaveUsers(payload.data.UserFind));
+      } else if (payload.data.UserUpsert) {
+        yield put(actionUserChange(payload.data.UserUpsert));
+      }
+      if (payload.media) {
+        yield put(actionMediaMessage(payload));
       }
     } catch (error) {
       yield put(actionRejected(key, error));
@@ -67,11 +85,37 @@ function* fetchWorker({ key, promise, status }) {
 }
 
 function* fetchCheck() {
+  debugger;
   yield takeEvery("PROMISE", fetchWorker);
+}
+function* mediaWorker({ media }) {
+  debugger;
+  try {
+    const mediaFile = yield call(getMediaFile, media);
+    yield putResolve(actionMediaMessage(mediaFile));
+  } catch (error) {
+    yield put(actionErrorMessage());
+  }
+}
+
+function* mediaCheck() {
+  yield takeLeading("MEDIA_MESSAGE", mediaWorker);
+}
+function* avatarWorker({ avatar }) {
+  debugger;
+  try {
+    const mediaFile = yield call(getMediaFile, avatar);
+    yield putResolve(actionChangeAvatar(mediaFile));
+  } catch (error) {
+    yield put(actionErrorMessage());
+  }
+}
+function* avatarCheck() {
+  yield takeLeading("CHANGE_AVATAR", avatarWorker);
 }
 
 function* rootSaga() {
-  yield all([searchCheck(), fetchCheck()]);
+  yield all([searchCheck(), fetchCheck(), mediaCheck(), avatarCheck()]);
 }
 export const SearchInput = connect(
   ({ search: { query } }) => ({

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import "./ChatList.css";
+import "./index.css";
 import "antd/dist/antd.css";
 import { Input, Button } from "antd";
 import { CloseOutlined, DownloadOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { LeftNavigation } from "./ChatList";
+import { LeftNavigation } from "./index";
 import { Pending } from "../../../helpers";
 import { actionCreateNewChat, actionChatList } from "../../../actions";
 import { store } from "../../../reducers";

@@ -1,0 +1,55 @@
+.button-menu {
+  margin: 5px;
+}
+
+.forward-chat-list {
+  display: flex;
+  height: 62px;
+  margin: 1px;
+  border: solid 2px #096dd9;
+  font-size: 18px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.forward-to {
+  display: flex;
+  width: 100%;
+  height: 50px;
+  padding-left: 300px;
+  padding-right: 300px;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+}
+
+.forward-to svg {
+  height: 1.7em;
+  width: 1.7em;
+}
+
+.forward-to div {
+  margin-right: auto;
+}
+
+.forward-to div {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-left: 10px;
+}
+
+.forward-to span:nth-child(1) {
+  font-style: normal;
+  font-weight: bolder;
+}
+
+.forward-to span:nth-child(2) {
+  font-style: normal;
+}
+
+.forward-to span:nth-child(3) {
+  font-style: italic;
+  font-size: 12px;
+}

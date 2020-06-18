@@ -17,7 +17,7 @@
   display: flex;
   justify-content: center;
   z-index: 2;
-  background: url("./flow.jpg") top center;
+  background: url("./image/flow.jpg") top center;
   background-size: 100% auto;
   flex-direction: column;
   justify-content: space-between;

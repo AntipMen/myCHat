@@ -1,16 +1,15 @@
-import React  from "react";
+import React from "react";
 import "./index.css";
-import { Home } from "./сomponents/ChatPage/index";
+import { Home, Header } from "./сomponents/ChatPage";
 import { Router, Switch, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import { Provider, connect } from "react-redux";
 import { store } from "./reducers";
 import { CLoginForm } from "./сomponents/LoginPage";
 import { CRegistrationForm } from "./сomponents/RegisterPage";
-import { CMessagesList } from "./сomponents/ChatPage/MessageForm/MessageForm";
+import { CMessagesList } from "./сomponents/ChatPage/MessageForm";
 import { Route } from "./reducers/routerReducer";
 import { CUserInfo } from "./сomponents/ChatPage/ChatList/userInfo";
-import { Header } from "./сomponents/ChatPage/index";
 
 const AuthorizedUser = () => (
   <>

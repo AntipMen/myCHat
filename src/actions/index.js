@@ -54,6 +54,49 @@ export const actionInvalidLogin = ({ message }) => ({
   message,
 });
 
+export const actionReplyMessage = (chatId, replyMessage) => ({
+  type: "REPLY_MESSAGE",
+  chatId,
+  replyMessage,
+});
+
+export const actionForwardMessage = (forwardMessage) => ({
+  type: "FORWARD_MESSAGE",
+  forwardMessage,
+});
+
+export const actionCleanMessage = () => ({ type: "CLEAN_MESSAGE" });
+
+export const actionMediaMessage = (media) => ({
+  type: "MEDIA_MESSAGE",
+  media,
+});
+
+export const actionErrorMessage = () => ({ type: "ERROR_MESSAGE" });
+
+export const actionChangeAvatar = (avatar) => ({
+  type: "CHANGE_AVATAR",
+  avatar,
+});
+
+export const actionEditMessage = (editMessage) => ({
+  type: "EDIT_MESSAGE",
+  editMessage,
+});
+
+export const actionSaveUsers = (users) => ({ type: "SAVE_USERS", users });
+export const actionUserChange = (avatar, userId) => ({
+  type: "USER_CHANGE",
+  avatar,
+  userId,
+});
+
+export const actionDeleteMessage = (chatId, messageId) => ({
+  type: "DELETE_MESSAGE",
+  chatId,
+  messageId,
+});
+
 export function actionChatList(store) {
   const id = store.auth.data.sub.id;
   let owner = JSON.stringify([{ "members._id": id }, { sort: [{ _id: -1 }] }]);
@@ -111,6 +154,8 @@ export function actionChatList(store) {
             media {
               url
               _id
+              originalFileName
+              type
             }
             chat {
               title
@@ -130,41 +175,11 @@ export function actionChatList(store) {
   );
 }
 
-// export function actionUser(user) {
-//   debugger
-//   if (user.auth.data !== undefined) {
-//     const id = user.auth.data.sub.id;
-//     let userId = JSON.stringify([{ _id: id }]);
-//     return actionPending(
-//       "user",
-//       GQL(
-//         ` query user($q: String){
-//             UserFind(query: $q){
-//               _id
-//               createdAt
-//               login
-//               nick
-//               acl
-//               avatar {
-//                 _id
-//                 url
-//               }
-//                 }
-//           }
-//           `,
-//         { q: userId }
-//       )
-//     );
-//   }
-// }
-
 export function actionCreateMessage(value, id) {
-  return async (dispatch) => {
-    let newmessage = await dispatch(
-      actionFetch(
-        "newmessage",
-        GQL(
-          `mutation MesRedAll($text: String){
+  return actionPending(
+    "newmessage",
+    GQL(
+      `mutation CreateMessage($text: String){
               MessageUpsert (message: {
               text: $text
               chat: {
@@ -182,20 +197,16 @@ export function actionCreateMessage(value, id) {
               }
               }
               }`,
-          { text: value }
-        )
-      )
-    );
-  };
+      { text: value }
+    )
+  );
 }
 
 export function actionMedia(value, mediaId, chatId) {
-  return async (dispatch) => {
-    let newmesmedia = await dispatch(
-      actionFetch(
-        "newmesmedia",
-        GQL(
-          `mutation MesRedAll{
+  return actionPending(
+    "newmesmedia",
+    GQL(
+      `mutation CreateMessageMedia{
                 MessageUpsert (message: {
                 text: \"${value}\"
                 media: [{
@@ -210,25 +221,23 @@ export function actionMedia(value, mediaId, chatId) {
                 media {
                   url
                   _id
+                  originalFileName
+                  type
                 }
                 owner {
                 login
                 }
                 }
                 }`
-        )
-      )
-    );
-  };
+    )
+  );
 }
 
 export function actionCreateNewChat(userId, auth, chatName) {
-  return async (dispatch) => {
-    let newchat = await dispatch(
-      actionFetch(
-        "newchat",
-        GQL(
-          `mutation chatId{
+  return actionPending(
+    "newchat",
+    GQL(
+      `mutation CreateNewChat{
             ChatUpsert(chat: {
               title:  \"${chatName}\"
                  members: [
@@ -248,10 +257,8 @@ export function actionCreateNewChat(userId, auth, chatName) {
               }
             }
           }`
-        )
-      )
-    );
-  };
+    )
+  );
 }
 
 export function actionAllUsers() {
@@ -281,13 +288,10 @@ export function actionAddMembers(chatId, newUser, members) {
   for (var i = 0; i < allusers.length; ++i) {
     newMembers[i] = { _id: allusers[i] };
   }
-
-  return async (dispatch) => {
-    let updatechat = await dispatch(
-      actionFetch(
-        "updatechat",
-        GQL(
-          `mutation NewMembers($membersList:[UserInput]){
+  return actionPending(
+    "updatechat",
+    GQL(
+      `mutation NewMembers($membersList:[UserInput]){
             ChatUpsert(chat: {
             _id:  \"${chatId}\"
             members: $membersList
@@ -305,20 +309,16 @@ export function actionAddMembers(chatId, newUser, members) {
               }
             }
           }`,
-          { membersList: newMembers }
-        )
-      )
-    );
-  };
+      { membersList: newMembers }
+    )
+  );
 }
 
 export function actionReply(value, chatId, messageId) {
-  return async (dispatch) => {
-    let replymes = await dispatch(
-      actionFetch(
-        "replymes",
-        GQL(
-          `mutation reply{
+  return actionPending(
+    "replymes",
+    GQL(
+      `mutation MessageReply{
             MessageUpsert(message: {
               chat: {
                 _id: \"${chatId}\"
@@ -336,23 +336,20 @@ export function actionReply(value, chatId, messageId) {
               media {
                 url
                 _id
+                originalFileName
+                type
               }
             }
           }`
-        )
-      )
-    );
-  };
+    )
+  );
 }
 
 export function actionForward(value, chatId, messageId) {
-  debugger;
-  return async (dispatch) => {
-    let forwardmes = await dispatch(
-      actionFetch(
-        "forward",
-        GQL(
-          `mutation forward{
+  return actionPending(
+    "forward",
+    GQL(
+      `mutation MessagrForward{
             MessageUpsert(message: {
               chat:{
                 _id: \"${chatId}\"
@@ -368,14 +365,63 @@ export function actionForward(value, chatId, messageId) {
               media {
                 url
                 _id
+                originalFileName
+                type
               }
               owner {
                 login
               }
             }
           }`
-        )
-      )
-    );
-  };
+    )
+  );
+}
+
+export function actionEdit(value, messageId) {
+  debugger;
+  return actionPending(
+    "edit",
+    GQL(
+      ` mutation EditMessage{
+            MessageUpsert(message:{ 
+              _id: \"${messageId}\"
+              text: \"${value}\"
+            }) 
+            {
+              _id
+              text
+              media {
+              _id
+              url
+              type
+            }
+            }
+          }`
+    )
+  );
+}
+
+export function actionChangeUser(mediaId, userId) {
+  return actionPending(
+    "changeuser",
+    GQL(
+      ` mutation UserChange{
+        UserUpsert(user: {
+          _id: \"${userId}\"
+          avatar: {
+            _id: \"${mediaId}\"
+          }
+        } ) {
+          _id
+          createdAt
+          login
+          nick
+          avatar{
+            _id
+            url
+          }
+        }
+      }`
+    )
+  );
 }

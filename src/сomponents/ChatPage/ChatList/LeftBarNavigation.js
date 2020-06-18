@@ -1,6 +1,6 @@
 import React from "react";
-import "./ChatList.css";
-import { CModal } from "./Modal/Modal";
+import "./index.css";
+import { CModal } from "./Modal";
 import { SearchInput } from "../../../saga";
 import { SearchOutlined } from "@ant-design/icons";
 

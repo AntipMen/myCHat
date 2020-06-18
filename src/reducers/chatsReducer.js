@@ -1,4 +1,5 @@
 import { formatDate } from "../helpers/time";
+import { store } from "emoji-mart";
 
 export default function chatsReducer(
   state,
@@ -37,9 +38,9 @@ export default function chatsReducer(
       ...allchats,
     };
   }
+
   if (type === "SAVE_MESSAGE") {
     debugger;
-
     if (state[message.chat._id]) {
       var messages = state[message.chat._id].messages;
       state[message.chat._id].messages = {
@@ -51,6 +52,7 @@ export default function chatsReducer(
       ...state,
     };
   }
+ 
   if (type === "DELETE_MESSAGE") {
     let newChats = { ...state };
     const chatFind = Object.values(newChats).find(
@@ -59,10 +61,7 @@ export default function chatsReducer(
     delete chatFind.messages[messageId._id];
     return newChats;
   }
-  // if (type === "UPSERT_CHATS") {
-  //   console.log(action);
-  //   return { action };
-  // }
+ 
 
   if (type === "AUTH_LOGOUT") {
     return {};
@@ -71,10 +70,6 @@ export default function chatsReducer(
   return state;
 }
 
-export const actionDeleteMessage = (chatId, messageId) => ({
-  type: "DELETE_MESSAGE",
-  chatId,
-  messageId,
-});
 
-// export const actionUpsertChats = (upsert) => ({ type: "UPSERT_CHATS", upsert})
+
+

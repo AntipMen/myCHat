@@ -1,5 +1,7 @@
-export default function usersReducer(state, { type, users, ...action }) {
-  //debugger;
+export default function usersReducer(
+  state,
+  { type, users, avatar, userId, ...action }
+) {
   if (!state) {
     return {};
   }
@@ -12,7 +14,12 @@ export default function usersReducer(state, { type, users, ...action }) {
       : [];
     return { ...state, ...allusers };
   }
+  if (type === "USER_CHANGE") {
+    let changeUser = Object.values(state).find(
+      (user) => user._id === avatar._id
+    );
+    changeUser.avatar = avatar.avatar;
+    return { ...state };
+  }
   return state;
 }
-
-export const actionSaveUsers = (users) => ({ type: "SAVE_USERS", users });

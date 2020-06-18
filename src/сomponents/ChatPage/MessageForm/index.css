@@ -1,0 +1,8 @@
+.block-chat-main {
+  display: flex;
+  max-height: 100%;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-around;
+  background-image: linear-gradient(#b5f5ec 20%, #40a9ff 90%, #1890ff);
+}

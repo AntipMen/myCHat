@@ -1,0 +1,126 @@
+.chat-messages-list {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-height: 100%;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+.chat-messages-list::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+  border-radius: 10px;
+}
+
+.chat-messages-list::-webkit-scrollbar {
+  display: block;
+  width: 10px;
+  background-color: #f5f5f5;
+}
+
+.chat-messages-list::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  bottom: 0;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.44, rgb(122, 153, 217)),
+    color-stop(0.72, rgb(73, 125, 189)),
+    color-stop(0.86, rgb(28, 58, 148))
+  );
+}
+
+.message {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 15px;
+}
+
+.partner {
+  display: flex;
+  align-items: flex-start;
+  margin: 15px;
+  flex-flow: wrap;
+}
+
+.partner .user-avatar {
+  order: 0;
+}
+
+.partner .message-text {
+  background: #b37feb;
+  color: white;
+  display: flex;
+  max-height: 500px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  max-width: 700px;
+  flex-direction: column;
+  order: 1;
+}
+
+.partner .message-username {
+  font-size: 11px;
+  color: #00474f;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.message .message-username {
+  font-size: 11px;
+  color: #00474f;
+  margin-bottom: 6px;
+  text-align: right;
+}
+
+.message .message-text {
+  background: #5ea3d0;
+  color: white;
+  display: flex;
+  max-height: 500px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  max-width: 700px;
+  flex-direction: column;
+}
+
+.partner .message-text .time {
+  font-size: 11px;
+  color: #00474f;
+  text-align: right;
+}
+
+.message .message-text .time {
+  font-size: 11px;
+  color: #00474f;
+  text-align: left;
+}
+
+.user-avatar img {
+  height: 50px;
+  width: 50px;
+  border-radius: 100%;
+  margin: 5px;
+  border: solid 2px #1890ff;
+}
+
+.circle-min {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  background: linear-gradient(to right, #f6ffed, #87e8de);
+  border: solid 2px #1890ff;
+  margin: 5px;
+}
+
+.circle-min h1 {
+  margin-top: 5px;
+  font-size: 20px;
+  text-align: center;
+}
