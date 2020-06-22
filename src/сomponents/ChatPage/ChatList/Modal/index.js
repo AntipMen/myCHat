@@ -22,7 +22,7 @@ export const Modal = ({ auth, users, avatar, change, onUser, onAvatar }) => {
   const isMe = users
     ? Object.values(users).find((user) => user.login === auth)
     : null;
-  console.log("av", avatar, "isMe", isMe);
+
   return (
     <React.Fragment>
       <Button

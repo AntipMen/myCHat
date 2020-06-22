@@ -26,10 +26,14 @@ import {
   actionMediaMessage,
   actionErrorMessage,
   actionChangeAvatar,
+  actionAudioMessage,
 } from "../actions";
 import { sagaMiddleware } from "../reducers";
 import { GQL } from "../graphQL";
-import { getMediaFile } from "../сomponents/ChatPage/MessageForm/upload/index";
+import {
+  getMediaFile,
+  getAudioFile,
+} from "../сomponents/ChatPage/MessageForm/upload/index";
 
 const delay = (ms) => new Promise((ok) => setTimeout(() => ok(ms), ms));
 
@@ -85,11 +89,10 @@ function* fetchWorker({ key, promise, status }) {
 }
 
 function* fetchCheck() {
-  debugger;
   yield takeEvery("PROMISE", fetchWorker);
 }
+
 function* mediaWorker({ media }) {
-  debugger;
   try {
     const mediaFile = yield call(getMediaFile, media);
     yield putResolve(actionMediaMessage(mediaFile));
@@ -102,9 +105,9 @@ function* mediaCheck() {
   yield takeLeading("MEDIA_MESSAGE", mediaWorker);
 }
 function* avatarWorker({ avatar }) {
-  debugger;
   try {
     const mediaFile = yield call(getMediaFile, avatar);
+
     yield putResolve(actionChangeAvatar(mediaFile));
   } catch (error) {
     yield put(actionErrorMessage());

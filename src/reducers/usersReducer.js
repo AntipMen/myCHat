@@ -1,6 +1,6 @@
 export default function usersReducer(
   state,
-  { type, users, avatar, userId, ...action }
+  { type, users, avatar, userId, token, ...action }
 ) {
   if (!state) {
     return {};
@@ -21,5 +21,6 @@ export default function usersReducer(
     changeUser.avatar = avatar.avatar;
     return { ...state };
   }
+
   return state;
 }

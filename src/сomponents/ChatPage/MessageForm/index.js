@@ -27,7 +27,8 @@ const MessagesList = ({
 }) => {
   const messagesRef = useRef(null);
   useEffect(() => {
-    messagesRef.current && messagesRef.current.scrollTo(0, 999999);
+    messagesRef.current &&
+      messagesRef.current.scrollTo(0, 999999);
   }, [chats[_id] && chats[_id].messages]);
   return chats[_id] ? (
     <>
@@ -53,5 +54,5 @@ const MessagesList = ({
 
 export const CMessagesList = connect((state) => ({
   chats: state.chats,
-  auth: state.auth.data && state.auth.data.sub.login,
+  auth: state.auth.data && state.auth.data.sub,
 }))(MessagesList);

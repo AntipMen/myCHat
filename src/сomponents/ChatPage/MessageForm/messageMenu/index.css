@@ -1,8 +1,13 @@
 .content-menu {
   display: flex;
   flex-direction: column;
+  background-color: #adc6ff;
 }
 
 .button-menu {
   margin: 5px;
+}
+
+.popover div {
+  background-color: #adc6ff;
 }

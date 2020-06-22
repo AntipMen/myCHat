@@ -15,6 +15,7 @@ import {
   actionCleanPromise,
   actionAllUsers,
   actionInvalidLogin,
+  actionUserStatus,
 } from "../../actions";
 import { store } from "../../reducers";
 import { CInvalidMessageForSignIn } from "../RegisterPage/valid";
@@ -93,24 +94,19 @@ class LoginForm extends Component {
 
 export function actionLogin(login, password) {
   return async (dispatch) => {
-    try {
-      let token = await dispatch(
-        actionFetch(
-          "login",
-          GQL(
-            `query login($login: String, $password: String){
+    let token = await dispatch(
+      actionFetch(
+        "login",
+        GQL(
+          `query login($login: String, $password: String){
           login(login: $login, password: $password)
       }`,
-            { login, password }
-          )
+          { login, password }
         )
-      );
-      dispatch(actionAuthLogin(token.data.login));
-      dispatch(actionChatList(store.getState()));
-      // dispatch(actionUser(store.getState()));
-    } catch (e) {
-      dispatch(actionInvalidLogin(e));
-    }
+      )
+    );
+    dispatch(actionAuthLogin(token.data.login));
+    dispatch(actionChatList(store.getState()));
   };
 }
 

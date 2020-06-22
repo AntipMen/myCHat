@@ -12,16 +12,19 @@ export default function chatsReducer(
     for (let chat of payload) {
       var chatMessages = chat.messages
         ? chat.messages.reduce((list, mes) => {
+            var lastMessage = chat.messages[chat.messages.length - 1];
             list[mes._id] = mes;
-            return list;
+
+            return { ...list, lastMessage: lastMessage };
           }, {})
         : [];
+      // let lastMessage = Object.values(chatMessages).map(item)
       let time = chat.messages
         ? chat.messages.map(
             (oneChat) =>
               (oneChat.createdAt = formatDate(
                 new Date(+oneChat.createdAt),
-                "dd-MM-yyyy HH:mm"
+                "dd-MM-yyyy HH:mm EEE"
               ))
           )
         : [];
@@ -40,19 +43,19 @@ export default function chatsReducer(
   }
 
   if (type === "SAVE_MESSAGE") {
-    debugger;
     if (state[message.chat._id]) {
       var messages = state[message.chat._id].messages;
       state[message.chat._id].messages = {
         ...messages,
         [message._id]: message,
+        lastMessage: message,
       };
     }
     return {
       ...state,
     };
   }
- 
+
   if (type === "DELETE_MESSAGE") {
     let newChats = { ...state };
     const chatFind = Object.values(newChats).find(
@@ -61,7 +64,6 @@ export default function chatsReducer(
     delete chatFind.messages[messageId._id];
     return newChats;
   }
- 
 
   if (type === "AUTH_LOGOUT") {
     return {};
@@ -69,7 +71,3 @@ export default function chatsReducer(
 
   return state;
 }
-
-
-
-

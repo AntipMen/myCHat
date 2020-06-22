@@ -1,7 +1,18 @@
 export default function messageReducer(
   state,
-  { type, chatId, replyMessage, forwardMessage, media, avatar, editMessage }
+  {
+    type,
+    chatId,
+    replyMessage,
+    forwardMessage,
+    media,
+    avatar,
+    editMessage,
+    audio,
+    match,
+  }
 ) {
+  debugger;
   if (!state) {
     return {};
   }
@@ -38,11 +49,20 @@ export default function messageReducer(
       messageMedia: editMessage.media,
     };
   }
+  if (type === "ROUTE") {
+    if (match.url.includes("chat")) {
+      var activeChat = match.params._id;
+    }
+    return { ...state, activeChat: activeChat };
+  }
   if (type === "MEDIA_MESSAGE") {
-    return { media, type: "media" };
+    return { ...state, media, type: "media" };
+  }
+  if (type === "AUDIO_MESSAGE") {
+    return { ...state, audio, type: audio };
   }
   if (type === "CHANGE_AVATAR") {
-    return { avatar, type: "avatar" };
+    return { ...state, avatar, type: "avatar" };
   }
   if (type === "CLEAN_MESSAGE") {
     return { type: "clean" };

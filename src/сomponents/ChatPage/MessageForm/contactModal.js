@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./Header.css";
 import { UserAddOutlined, UsergroupAddOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import { Modal, Button } from "antd";
 import { connect } from "react-redux";
-import { actionAddMembers, actionSaveChat } from "../../../actions";
+import { actionAddMembers } from "../../../actions";
 import { Pending } from "../../../helpers";
+import { AvatarColors } from "./messageList/avatars";
 
 export const ContactsModal = ({ chats, params, allusers, onAdd }) => {
   const [visible, setVisible] = useState(false);
+  const [value, setValue] = useState("");
 
   const showModal = () => {
     setVisible(true);
@@ -17,6 +19,7 @@ export const ContactsModal = ({ chats, params, allusers, onAdd }) => {
   const handleCancel = () => {
     setVisible(false);
   };
+
   const chatId = Object.values(chats).find((chat) => chat._id === params);
   let members = chatId.members.map((id) => id._id);
 
@@ -41,30 +44,19 @@ export const ContactsModal = ({ chats, params, allusers, onAdd }) => {
         <div className="contacts-search">
           {allusers ? (
             <div className="contacts-list">
-              {allusers.map((user) => (
+              {Object.values(allusers).map((user) => (
                 <>
                   {user.login.length > 1 ? (
                     <div className="contact">
-                      <div className="user-avatar">
-                        {user.avatar != null ? (
-                          <img
-                            src={
-                              user.avatar &&
-                              `http://chat.fs.a-level.com.ua/${user.avatar.url}`
-                            }
-                            width="50px"
-                            alt="avatar"
-                          />
+                      <UserAvatar user={user} />
+                      <span>
+                        {user.login.length > 10 ? (
+                          <h3>{user.login.slice(0, 11) + "..."}</h3>
                         ) : (
-                          <span className="circle-min">
-                            <h1>{user.login.slice(0, 1)}</h1>
-                          </span>
+                          <h3>{user.login}</h3>
                         )}
-                      </div>
-                      <h3>
-                        {user.login} ({user.nick})
-                      </h3>
-
+                        ({user.nick})
+                      </span>
                       <Button
                         type="primary"
                         shape="circle"
@@ -87,12 +79,35 @@ export const ContactsModal = ({ chats, params, allusers, onAdd }) => {
   );
 };
 
+const UserAvatar = ({ user }) => {
+  const { color, colorLighten } = AvatarColors(user.login);
+  return (
+    <div className="user-avatar">
+      {user.avatar != null ? (
+        <img
+          src={
+            user.avatar && `http://chat.fs.a-level.com.ua/${user.avatar.url}`
+          }
+          width="50px"
+          alt="avatar"
+        />
+      ) : (
+        <span
+          className="circle-min"
+          style={{
+            background: `linear-gradient(135deg, ${color} 0%, ${colorLighten} 96.52%)`,
+          }}
+        >
+          <h1>{user.login.slice(0, 1)}</h1>
+        </span>
+      )}
+    </div>
+  );
+};
+
 export const CContactsModal = connect(
   (state) => ({
-    allusers:
-      state.promise.allusers &&
-      state.promise.allusers.payload &&
-      state.promise.allusers.payload.data.UserFind,
+    allusers: state.users,
     params: state.router.match.params._id,
     chats: state.chats,
   }),

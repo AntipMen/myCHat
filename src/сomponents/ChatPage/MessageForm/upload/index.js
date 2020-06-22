@@ -5,6 +5,7 @@ import "./index.css";
 
 export const Upload = ({ onMedia }) => {
   const ref = useRef(null);
+
   return (
     <form
       action="/upload"

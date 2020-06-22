@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "antd/dist/antd.css";
 import { Modal } from "antd";
 import { connect } from "react-redux";
+import "./index.css";
 
 export const MessageMedia = ({ media, image, medialocal }) => {
   const [visible, setVisible] = useState(false);
@@ -51,11 +52,11 @@ export const MessageMedia = ({ media, image, medialocal }) => {
         ) : null}
 
         <Modal
-          className="modal-image"
           footer={null}
           title="Image"
           visible={visible}
           onCancel={hideModal}
+          className="ant-modal"
         >
           {image != null && image != undefined ? (
             <img

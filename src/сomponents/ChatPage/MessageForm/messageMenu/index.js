@@ -8,11 +8,10 @@ import {
   actionEditMessage,
   actionDeleteMessage,
 } from "../../../../actions";
-import { CForwardChatsList } from "../messageForward";
+import { ForwardList } from "../messageForward";
 
 const Content = ({ onReply, replyMessage, chatId, onDelete, onEdit }) => (
   <>
-    {console.log(replyMessage)}
     <div className="content-menu">
       <Button
         className="button-menu"
@@ -21,7 +20,7 @@ const Content = ({ onReply, replyMessage, chatId, onDelete, onEdit }) => (
       >
         Reply Message
       </Button>
-      <CForwardChatsList forwardMessage={replyMessage} />
+      <ForwardList forwardMessage={replyMessage} />
       <Button
         className="button-menu"
         type="dashed"
@@ -56,7 +55,7 @@ export const MessageMenu = (replyMessage) => (
   <>
     <Popover
       content={<CContent replyMessage={replyMessage.message} />}
-      trigger="click"
+      className="popover"
     >
       <MoreOutlined />
     </Popover>

@@ -9,6 +9,8 @@ export const actionSearchResult = (result) => ({
   type: "SEARCH_RESULT",
   result,
 });
+
+export const actionSearchInUsers = (value) => ({ type: "SEARCH_IN", value });
 export const actionCleanResult = () => ({ type: "CLEAN_RESULT" });
 
 export const actionPending = (key, promise) => {
@@ -97,6 +99,7 @@ export const actionDeleteMessage = (chatId, messageId) => ({
   messageId,
 });
 
+export const actionAudioMessage = (audio) => ({ type: "AUDIO_MESSAGE", audio });
 export function actionChatList(store) {
   const id = store.auth.data.sub.id;
   let owner = JSON.stringify([{ "members._id": id }, { sort: [{ _id: -1 }] }]);
@@ -130,6 +133,10 @@ export function actionChatList(store) {
               _id
               createdAt
               text
+              media{
+                url
+                type
+              }
               owner{
                 login
                 _id
@@ -142,6 +149,10 @@ export function actionChatList(store) {
               owner {
                 login
               }
+              media{
+                url
+                type
+              }
             }
             forwardWith {
               _id
@@ -149,6 +160,10 @@ export function actionChatList(store) {
               text
               owner {
                 login
+              }
+              media{
+                url
+                type
               }
             }
             media {
@@ -161,6 +176,7 @@ export function actionChatList(store) {
               title
             }
             owner {
+              _id
               login
               avatar {
                 url

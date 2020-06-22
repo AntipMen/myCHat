@@ -4,6 +4,9 @@ import { Button } from "antd";
 import { connect } from "react-redux";
 import { actionCleanMessage } from "../../../../actions";
 import "./index.css";
+import { CMessageMedia } from "../messageMedia";
+import { MessageAudio } from "../messageAudio";
+import { MessageVideo, LinkMessage } from "../messageVideo";
 
 const ReplyToMessage = ({ onClean, message }) => (
   <>
@@ -37,6 +40,25 @@ export const RepliesMessage = ({ message }) => {
             message.replyTo.owner.login}
         </span>
         <span>{message.replyTo.text.slice(0, 16) + "..."}</span>
+        {message.replyTo.media !== null &&
+        message.replyTo.media !== undefined ? (
+          <div className="reply-media">
+            {message.replyTo.media[0].type === "image/jpeg" ||
+            message.replyTo.media[0].type === "image/png" ? (
+              <CMessageMedia image={message.replyTo.media} />
+            ) : message.replyTo.media[0].type === "audio/x-m4a" ||
+              message.replyTo.media[0].type === "audio/mpeg" ||
+              message.replyTo.media[0].type === "audio/mp3" ||
+              message.replyTo.media[0].type === "audio/ogg" ||
+              message.replyTo.media[0].type === "audio/mp4" ? (
+              <MessageAudio audio={message.replyTo.media} />
+            ) : message.replyTo.media[0].type === "video/mp4" ||
+              message.replyTo.media[0].type === "video/ogg" ||
+              message.replyTo.media[0].type === "video/webm" ? (
+              <MessageVideo video={message.replyTo.media} />
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </a>
   );

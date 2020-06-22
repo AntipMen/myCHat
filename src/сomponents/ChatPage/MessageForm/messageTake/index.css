@@ -1,0 +1,9 @@
+.badge {
+  margin: 5px;
+}
+
+.badge span {
+  top: 5px;
+  right: 5px;
+  bottom: 0;
+}

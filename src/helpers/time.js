@@ -77,5 +77,4 @@ export function formatDate(date, patternStr) {
 function twoDigitPad(num) {
   return num < 10 ? "0" + num : num;
 }
-
-console.log(formatDate(new Date(), "dd-MM-yyyy HH:mm"));
+// console.log(formatDate(new Date(), "dd-MM-yyyy HH:mm EEE"));
