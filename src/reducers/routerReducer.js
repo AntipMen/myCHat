@@ -2,22 +2,25 @@ import React from "react";
 import { connect } from "react-redux";
 import { Route as OriginalRoute } from "react-router-dom";
 
-export default function routerReducer(state, action) {
+export default function routerReducer(state, { type, match }) {
   if (state === undefined) {
     return { match: null };
   }
-  if (action.type === "ROUTE") {
-    return { match: action.match };
+  if (type === "ROUTE") {
+    return { match: match };
+  }
+  if (type === "LOADING") {
+    return { ...state };
   }
   return state;
 }
 
-function actionRouteToRedux(match) {
+const actionRouteToRedux = (match) => {
   return {
     type: "ROUTE",
     match,
   };
-}
+};
 
 let CRoute = (
   p //action - actionCreator to push into redux

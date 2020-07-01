@@ -12,7 +12,6 @@ export default function messageReducer(
     match,
   }
 ) {
-  debugger;
   if (!state) {
     return {};
   }

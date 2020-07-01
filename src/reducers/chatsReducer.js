@@ -1,9 +1,8 @@
 import { formatDate } from "../helpers/time";
-import { store } from "emoji-mart";
 
 export default function chatsReducer(
   state,
-  { type, payload, message, chatId, messageId, media, ...action }
+  { type, payload, message, chatId, messageId }
 ) {
   if (!state) {
     return {};
@@ -18,16 +17,17 @@ export default function chatsReducer(
             return { ...list, lastMessage: lastMessage };
           }, {})
         : [];
-      // let lastMessage = Object.values(chatMessages).map(item)
+
       let time = chat.messages
         ? chat.messages.map(
             (oneChat) =>
               (oneChat.createdAt = formatDate(
                 new Date(+oneChat.createdAt),
-                "dd-MM-yyyy HH:mm EEE"
+                "yyyy-MM-dd HH:mm EEE"
               ))
           )
         : [];
+
       chat.messages = chatMessages;
     }
     const chats = payload;

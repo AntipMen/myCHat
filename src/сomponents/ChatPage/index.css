@@ -1,12 +1,12 @@
 .block-users-list {
   display: flex;
-  width: 350px;
-  /* min-width: 30%; */
+  width: 21%;
   height: 100vh;
   max-height: 100%;
   flex-direction: column;
   background: url("./list.jpg") top center;
   background-size: 138% auto;
+  border-right: solid 2px #096dd9;
 }
 .block-chat {
   width: 79%;
@@ -18,3 +18,39 @@
   top: 60px;
   bottom: 50px;
 }
+
+@media (max-width: 1392px) {
+  .block-users-list {
+    width: 22%;
+  }
+  .block-chat {
+    width: 78%;
+  }
+}
+
+@media (max-width: 1312px) {
+  .block-users-list {
+    width: 23%;
+  }
+  .block-chat {
+    width: 77%;
+  }
+}
+
+@media (max-width: 1248px) {
+  .block-users-list {
+    width: 24%;
+  }
+  .block-chat {
+    width: 76%;
+  }
+}
+@media (max-width: 1200px) {
+  .block-users-list {
+    width: 25%;
+  }
+  .block-chat {
+    width: 75%;
+  }
+}
+

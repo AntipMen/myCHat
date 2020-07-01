@@ -1,33 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { Badge } from "antd";
 import "./index.css";
+import { formatDate } from "../../../../helpers/time";
 
 export const MessageCounter = ({ message, chatId, activeChat, isMe }) => {
-  console.log(message, chatId, activeChat);
   const [counter, setCounter] = useState(0);
+  let today = formatDate(new Date(), "yyyy-MM-dd HH:mm");
   const chatWithNewMes = message && message.chat ? message.chat._id : null;
   const owner = message && message.owner._id;
-  console.log(owner, isMe);
+
   useEffect(() => {
     if (
-      message &&
+      message !== undefined &&
+      message._id &&
       chatWithNewMes === chatId &&
-      chatId !== activeChat &&
       owner !== isMe
     ) {
-      setCounter(counter + 1);
+      setCounter((counter) => counter + 1);
     }
+  }, [message._id, isMe, chatId, chatWithNewMes,owner]);
+
+  useEffect(() => {
     if (chatId === activeChat) {
       setCounter(0);
     }
-  }, [message, activeChat]);
+  }, [activeChat, chatId]);
+  useEffect(() => {
+    if (message.createdAt < today) {
+      setCounter(0);
+    }
+  }, [today, message.createdAt]);
   return (
     <>
-      {counter > 0 && (
+      {counter > 0 && chatWithNewMes !== activeChat && owner !== isMe && (
         <div className="badge">
           <Badge count={counter}>
-            {}
-            <a href="#" className="head-example" />
+            <span href="#" className="head-example"></span>
           </Badge>
         </div>
       )}

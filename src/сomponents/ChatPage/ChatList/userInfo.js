@@ -8,9 +8,17 @@ import { connect } from "react-redux";
 import { LeftNavigation } from "./index";
 import { Pending } from "../../../helpers";
 import { actionCreateNewChat, actionChatList } from "../../../actions";
-import { store } from "../../../reducers";
 
-export const UserInfo = ({ users, id, auth, onCreate, min = 2, onLoading }) => {
+export const UserInfo = ({
+  users,
+  id,
+  auth,
+  onCreate,
+  min = 2,
+  onUpdateChat,
+}) => {
+  const isMe = auth.data.sub.id;
+  const token = auth.jwt;
   const [chatName, setChatName] = useState("");
   var error = {
     avatar: {
@@ -31,11 +39,7 @@ export const UserInfo = ({ users, id, auth, onCreate, min = 2, onLoading }) => {
         <div className="block-close">
           {" "}
           <Link to="/mychat">
-            <Button
-              type="primary"
-              onClick={() => onLoading(store.getState())}
-              icon={<CloseOutlined />}
-            />
+            <Button type="primary" icon={<CloseOutlined />} />
           </Link>
         </div>
         {userId ? (
@@ -75,7 +79,10 @@ export const UserInfo = ({ users, id, auth, onCreate, min = 2, onLoading }) => {
                     <Button
                       type="primary"
                       icon={<DownloadOutlined />}
-                      onClick={() => onCreate(userId, auth, chatName)}
+                      onClick={() =>
+                        onCreate(userId, isMe, chatName) &&
+                        onUpdateChat(token, isMe)
+                      }
                       disabled={!valid}
                     >
                       Create New Chat
@@ -97,10 +104,10 @@ export const CUserInfo = connect(
   (state) => ({
     users: state.search.result,
     id: state.router.match.params._id,
-    auth: state.auth.data.sub.id,
+    auth: state.auth,
   }),
   {
     onCreate: actionCreateNewChat,
-    onLoading: actionChatList,
+    onUpdateChat: actionChatList,
   }
 )(UserInfo);

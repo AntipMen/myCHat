@@ -16,15 +16,16 @@ import {
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-export const Modal = ({ auth, users, avatar, change, onUser, onAvatar }) => {
+export const Modal = ({ auth, users, avatar, onUser }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const isMe = users
     ? Object.values(users).find((user) => user.login === auth)
     : null;
+  const valid = avatar === undefined;
 
   return (
-    <React.Fragment>
+    <>
       <Button
         onClick={() => setIsOpen(true)}
         type="primary"
@@ -61,6 +62,7 @@ export const Modal = ({ auth, users, avatar, change, onUser, onAvatar }) => {
               <Button
                 type="primary"
                 icon={<DownloadOutlined />}
+                disabled={valid}
                 onClick={() => onUser(avatar._id, isMe._id)}
               >
                 Change avatar
@@ -74,7 +76,7 @@ export const Modal = ({ auth, users, avatar, change, onUser, onAvatar }) => {
           </CLogoutButton>
         </div>
       )}
-    </React.Fragment>
+    </>
   );
 };
 
@@ -90,10 +92,6 @@ export const CModal = connect(
     auth: state.auth.data.sub.login,
     users: state.users,
     avatar: state.message.avatar,
-    change:
-      state.promise.changeuser &&
-      state.promise.changeuser.payload &&
-      state.promise.changeuser.payload.data.UserUpsert,
   }),
   { onUser: actionChangeUser, onAvatar: actionChangeUser }
 )(Modal);

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import "./index.css";
 import { Link } from "react-router-dom";
-import { Modal, Button, Popover } from "antd";
+import { Button, Popover } from "antd";
 import { ShareAltOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { actionForwardMessage, actionCleanMessage } from "../../../../actions";
 import { ChatAvatar } from "../../ChatList";
 import { CMessageMedia } from "../messageMedia";
 import { MessageAudio } from "../messageAudio";
-import { MessageVideo, LinkMessage } from "../messageVideo";
+import { MessageVideo } from "../messageVideo";
 
 const ForwardChatsList = ({ chats, router, onForward, forwardMessage }) => {
   return (
@@ -18,7 +18,6 @@ const ForwardChatsList = ({ chats, router, onForward, forwardMessage }) => {
           <div key={chat._id} chat={chat} className="forward-chat-list">
             <ChatAvatar chat={chat} />
             <h3>{chat.title}</h3>
-            {console.log("foew", forwardMessage, router)}
             <Button
               type="primary"
               shape="circle"
@@ -43,10 +42,6 @@ export const CForwardChatsList = connect(
 
 export const ForwardList = ({ forwardMessage }) => {
   const [visible, setVisible] = useState(false);
-
-  const handleCancel = () => {
-    setVisible(false);
-  };
 
   const handleVisibleChange = (visible) => {
     setVisible(visible);

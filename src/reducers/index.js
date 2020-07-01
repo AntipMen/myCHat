@@ -26,4 +26,4 @@ export const store = createStore(
   applyMiddleware(thunk, sagaMiddleware)
 );
 
-store.subscribe(() => console.log(store.getState()));
+store.subscribe(() => store.getState());

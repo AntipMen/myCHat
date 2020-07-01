@@ -1,4 +1,4 @@
-import React, { Component, useRef, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./index.css";
 import { Button, Input, Popover } from "antd";
@@ -9,20 +9,11 @@ import {
   actionMedia,
   actionSaveMes,
   actionEdit,
-  actionMediaMessage,
   actionCleanMessage,
   actionAudioMessage,
 } from "../../../../actions";
 import { CUpload } from "../upload";
-import {
-  SmileOutlined,
-  SendOutlined,
-  AudioOutlined,
-  CloseCircleOutlined,
-  CheckCircleTwoTone,
-  PaperClipOutlined,
-  CloseOutlined,
-} from "@ant-design/icons";
+import { SmileOutlined, SendOutlined } from "@ant-design/icons";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import { CReplyToMessage } from "../messageReply";
@@ -100,13 +91,13 @@ const InputMessage = ({
           <Input
             type="text"
             placeholder="Type a message..."
-            autoSize={{ minRows: 1.5, maxRows: 6 }}
             value={value}
             autoFocus={true}
             onChange={(event) => setValue(event.target.value)}
             className="input-text"
             onKeyPress={(event) => (event.keyCode === 13 ? onMessage() : null)}
           />
+
           <button
             className="ant-btn ant-btn-primary ant-btn-circle ant-btn-lg ant-btn-icon-only"
             onClick={

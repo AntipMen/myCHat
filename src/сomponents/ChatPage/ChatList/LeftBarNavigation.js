@@ -7,7 +7,7 @@ import { SearchOutlined } from "@ant-design/icons";
 export const NavigationLeftBar = () => (
   <div className="block-user-header">
     <CModal />
-    <div>
+    <div className="input-search">
       <span className="fa fa-address-book-o" aria-hidden="true">
         <SearchOutlined />
       </span>

@@ -6,7 +6,7 @@ import { actionCleanMessage } from "../../../../actions";
 import "./index.css";
 import { CMessageMedia } from "../messageMedia";
 import { MessageAudio } from "../messageAudio";
-import { MessageVideo, LinkMessage } from "../messageVideo";
+import { MessageVideo } from "../messageVideo";
 
 const ReplyToMessage = ({ onClean, message }) => (
   <>

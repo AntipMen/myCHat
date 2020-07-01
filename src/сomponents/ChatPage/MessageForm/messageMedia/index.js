@@ -18,7 +18,7 @@ export const MessageMedia = ({ media, image, medialocal }) => {
   return (
     <>
       <div>
-        {image != null && image != undefined ? (
+        {image !== null && image !== undefined ? (
           <img
             src={
               image[0] && image[0].url
@@ -58,7 +58,7 @@ export const MessageMedia = ({ media, image, medialocal }) => {
           onCancel={hideModal}
           className="ant-modal"
         >
-          {image != null && image != undefined ? (
+          {image !== null && image !== undefined ? (
             <img
               src={
                 image[0] && image[0].url
@@ -69,14 +69,14 @@ export const MessageMedia = ({ media, image, medialocal }) => {
               alt="media"
               onClick={showModal}
             />
-          ) : media != null && media != undefined ? (
+          ) : media !== null && media !== undefined ? (
             <img
               src={media ? `http://chat.fs.a-level.com.ua/${media}` : "uups"}
               width="100%"
               alt="media"
               onClick={showModal}
             /> ? (
-              medialocal != null
+              medialocal !== null
             ) : (
               <img
                 src={

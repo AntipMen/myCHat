@@ -1,7 +1,4 @@
-export default function usersReducer(
-  state,
-  { type, users, avatar, userId, token, ...action }
-) {
+export default function usersReducer(state, { type, users, avatar }) {
   if (!state) {
     return {};
   }
@@ -12,7 +9,11 @@ export default function usersReducer(
           return list;
         }, {})
       : [];
-    return { ...state, ...allusers };
+    var usersWithLogin = { ...allusers };
+    Object.values(usersWithLogin)
+      .filter((usersId) => usersId.login.length <= 0)
+      .map((index) => delete usersWithLogin[index._id]);
+    return { ...state, ...usersWithLogin };
   }
   if (type === "USER_CHANGE") {
     let changeUser = Object.values(state).find(
@@ -20,6 +21,9 @@ export default function usersReducer(
     );
     changeUser.avatar = avatar.avatar;
     return { ...state };
+  }
+  if (type === "AUTH_LOGOUT") {
+    return {};
   }
 
   return state;

@@ -6,6 +6,7 @@ export const Pending = () => (
   <img
     src="https://flevix.com/wp-content/uploads/2019/07/Spin-Preloader.gif"
     alt="loading"
+    height="700px"
   />
 );
 

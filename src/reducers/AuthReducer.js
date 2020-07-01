@@ -1,30 +1,37 @@
 import * as jwt_decode from "jwt-decode";
 
-export default function authReducer(state, action) {
+export default function authReducer(state, { type, token, message, users }) {
   if (!state) {
     if (!localStorage.authToken) {
       return {};
     } else {
-      action.type = "AUTH_LOGIN";
-      action.token = localStorage.authToken;
+      type = "AUTH_LOGIN";
+      token = localStorage.authToken;
     }
   }
 
-  if (action.type === "AUTH_LOGIN") {
-    const jwt = action.token;
+  if (type === "AUTH_LOGIN") {
+    const jwt = token;
     const data = jwt_decode(jwt);
     localStorage.setItem("authToken", jwt);
-    return { jwt: jwt, data: data, status: "online" };
+    return { jwt: jwt, data: data };
   }
-  if (action.type === "AUTH_LOGOUT") {
+
+  if (type === "SAVE_USERS") {
+    const isMe = users.find((me) => me._id === state.data.sub.id);
+    const avatar =
+      isMe.avatar !== null && isMe.avatar !== undefined ? isMe.avatar : null;
+    return { ...state, avatar };
+  }
+  if (type === "AUTH_LOGOUT") {
     localStorage.setItem("authToken", "");
-    return { status: "offline" };
+    return {};
   }
-  if (action.type === "INVALID_LOGIN") {
+  if (type === "INVALID_LOGIN") {
     return "Invalid login or password";
   }
-  if (action.type === "INVALID_PASSWORD") {
-    return action.message;
+  if (type === "INVALID_PASSWORD") {
+    return message;
   }
   return state;
 }

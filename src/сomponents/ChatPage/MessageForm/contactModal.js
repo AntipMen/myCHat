@@ -1,17 +1,25 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import "./Header.css";
 import { UserAddOutlined, UsergroupAddOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import { Modal, Button } from "antd";
 import { connect } from "react-redux";
-import { actionAddMembers } from "../../../actions";
+import { actionAddMembers, actionChatList } from "../../../actions";
 import { Pending } from "../../../helpers";
 import { AvatarColors } from "./messageList/avatars";
 
-export const ContactsModal = ({ chats, params, allusers, onAdd }) => {
+export const ContactsModal = ({
+  chats,
+  params,
+  allusers,
+  onAdd,
+  onUpdate,
+  auth,
+}) => {
   const [visible, setVisible] = useState(false);
-  const [value, setValue] = useState("");
 
+  const isMe = auth.data.sub.id;
+  const token = auth.jwt;
   const showModal = () => {
     setVisible(true);
   };
@@ -22,11 +30,13 @@ export const ContactsModal = ({ chats, params, allusers, onAdd }) => {
 
   const chatId = Object.values(chats).find((chat) => chat._id === params);
   let members = chatId.members.map((id) => id._id);
+  const valid = members.find((i) => i === chatId.owner._id) === isMe;
 
   return (
     <div>
       <Button
         type="primary"
+        disabled={!valid}
         onClick={showModal}
         icon={<UsergroupAddOutlined />}
         style={{ backgroundColor: "#69c0ff" }}
@@ -45,9 +55,11 @@ export const ContactsModal = ({ chats, params, allusers, onAdd }) => {
           {allusers ? (
             <div className="contacts-list">
               {Object.values(allusers).map((user) => (
-                <>
-                  {user.login.length > 1 ? (
-                    <div className="contact">
+                <div className="contact" key={user._id}>
+                  {user.login !== "" &&
+                  user.login !== " " &&
+                  user.login.length > 0 ? (
+                    <>
                       <UserAvatar user={user} />
                       <span>
                         {user.login.length > 10 ? (
@@ -62,12 +74,14 @@ export const ContactsModal = ({ chats, params, allusers, onAdd }) => {
                         shape="circle"
                         icon={<UserAddOutlined />}
                         onClick={() =>
-                          onAdd(params, user._id, members) && handleCancel()
+                          onAdd(params, user._id, members) &&
+                          onUpdate(token, isMe) &&
+                          handleCancel()
                         }
                       />
-                    </div>
-                  ) : undefined}
-                </>
+                    </>
+                  ) : null}
+                </div>
               ))}
             </div>
           ) : (
@@ -110,6 +124,7 @@ export const CContactsModal = connect(
     allusers: state.users,
     params: state.router.match.params._id,
     chats: state.chats,
+    auth: state.auth,
   }),
-  { onAdd: actionAddMembers }
+  { onAdd: actionAddMembers, onUpdate: actionChatList }
 )(ContactsModal);

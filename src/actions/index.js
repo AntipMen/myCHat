@@ -1,5 +1,5 @@
-import { actionFetch } from "../reducers/PromiseReducer";
-import { GQL } from "../graphQL";
+/* eslint-disable */
+import { getGQL } from "../graphQL";
 
 export const actionAuthLogin = (token) => ({ type: "AUTH_LOGIN", token });
 export const actionAuthLogout = () => ({ type: "AUTH_LOGOUT" });
@@ -99,13 +99,48 @@ export const actionDeleteMessage = (chatId, messageId) => ({
   messageId,
 });
 
+export function actionLogin(login, password) {
+  return actionPending(
+    "login",
+    getGQL(
+      {
+        Authorization: "Bearer " + localStorage.authToken,
+      },
+      `query login($login: String, $password: String){
+          login(login: $login, password: $password)
+      }`,
+      { login, password }
+    )
+  );
+}
+
+export function actionRegister(login, password, nick) {
+  return actionPending(
+    "reg",
+    getGQL(
+      {},
+      `mutation reg($login: String, $password: String, $nick: String){
+          UserUpsert(user: {login:$login, password: $password, nick: $nick})
+          {_id 
+            login
+            nick
+          }
+      }`,
+      { login, password, nick }
+    )
+  );
+}
+
 export const actionAudioMessage = (audio) => ({ type: "AUDIO_MESSAGE", audio });
-export function actionChatList(store) {
-  const id = store.auth.data.sub.id;
+
+export function actionChatList(token, id) {
   let owner = JSON.stringify([{ "members._id": id }, { sort: [{ _id: -1 }] }]);
   return actionPending(
     "chats",
-    GQL(
+    getGQL(
+      {
+        Authorization: "Bearer " + token,
+      },
       `query ChatF($owner: String){
         ChatFind(query: $owner) {
           _id
@@ -114,11 +149,20 @@ export function actionChatList(store) {
           }
           owner {
             login
+            _id
+            avatar {
+              _id
+              url
+            }
           }
           title
           members {
             login
             _id
+            avatar {
+              _id
+              url
+            }
           }
           messages {
             _id
@@ -174,6 +218,7 @@ export function actionChatList(store) {
             }
             chat {
               title
+              _id
             }
             owner {
               _id
@@ -194,12 +239,15 @@ export function actionChatList(store) {
 export function actionCreateMessage(value, id) {
   return actionPending(
     "newmessage",
-    GQL(
+    getGQL(
+      {
+        Authorization: "Bearer " + localStorage.authToken,
+      },
       `mutation CreateMessage($text: String){
               MessageUpsert (message: {
               text: $text
               chat: {
-              _id: \"${id}\"
+              _id: \"${id}\" 
               }
               }){
               _id
@@ -221,7 +269,10 @@ export function actionCreateMessage(value, id) {
 export function actionMedia(value, mediaId, chatId) {
   return actionPending(
     "newmesmedia",
-    GQL(
+    getGQL(
+      {
+        Authorization: "Bearer " + localStorage.authToken,
+      },
       `mutation CreateMessageMedia{
                 MessageUpsert (message: {
                 text: \"${value}\"
@@ -252,7 +303,10 @@ export function actionMedia(value, mediaId, chatId) {
 export function actionCreateNewChat(userId, auth, chatName) {
   return actionPending(
     "newchat",
-    GQL(
+    getGQL(
+      {
+        Authorization: "Bearer " + localStorage.authToken,
+      },
       `mutation CreateNewChat{
             ChatUpsert(chat: {
               title:  \"${chatName}\"
@@ -277,10 +331,13 @@ export function actionCreateNewChat(userId, auth, chatName) {
   );
 }
 
-export function actionAllUsers() {
+export function actionAllUsers(token) {
   return actionPending(
     "users",
-    GQL(
+    getGQL(
+      {
+        Authorization: "Bearer " + token,
+      },
       `query user{
             UserFind(query: "[{}]"){
               _id
@@ -306,7 +363,10 @@ export function actionAddMembers(chatId, newUser, members) {
   }
   return actionPending(
     "updatechat",
-    GQL(
+    getGQL(
+      {
+        Authorization: "Bearer " + localStorage.authToken,
+      },
       `mutation NewMembers($membersList:[UserInput]){
             ChatUpsert(chat: {
             _id:  \"${chatId}\"
@@ -315,10 +375,6 @@ export function actionAddMembers(chatId, newUser, members) {
               _id
               createdAt
               title
-              media {
-                url
-                _id
-              }
               members {
                 login
                 _id
@@ -333,7 +389,10 @@ export function actionAddMembers(chatId, newUser, members) {
 export function actionReply(value, chatId, messageId) {
   return actionPending(
     "replymes",
-    GQL(
+    getGQL(
+      {
+        Authorization: "Bearer " + localStorage.authToken,
+      },
       `mutation MessageReply{
             MessageUpsert(message: {
               chat: {
@@ -364,7 +423,10 @@ export function actionReply(value, chatId, messageId) {
 export function actionForward(value, chatId, messageId) {
   return actionPending(
     "forward",
-    GQL(
+    getGQL(
+      {
+        Authorization: "Bearer " + localStorage.authToken,
+      },
       `mutation MessagrForward{
             MessageUpsert(message: {
               chat:{
@@ -394,10 +456,12 @@ export function actionForward(value, chatId, messageId) {
 }
 
 export function actionEdit(value, messageId) {
-  debugger;
   return actionPending(
     "edit",
-    GQL(
+    getGQL(
+      {
+        Authorization: "Bearer " + localStorage.authToken,
+      },
       ` mutation EditMessage{
             MessageUpsert(message:{ 
               _id: \"${messageId}\"
@@ -420,7 +484,10 @@ export function actionEdit(value, messageId) {
 export function actionChangeUser(mediaId, userId) {
   return actionPending(
     "changeuser",
-    GQL(
+    getGQL(
+      {
+        Authorization: "Bearer " + localStorage.authToken,
+      },
       ` mutation UserChange{
         UserUpsert(user: {
           _id: \"${userId}\"

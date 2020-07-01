@@ -32,17 +32,18 @@
   );
 }
 
-.message {
+.message,
+.partner {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
   margin: 15px;
+  align-items: center;
+}
+
+.message {
+  justify-content: flex-end;
 }
 
 .partner {
-  display: flex;
-  align-items: flex-start;
-  margin: 15px;
   flex-flow: wrap;
 }
 
@@ -50,70 +51,72 @@
   order: 0;
 }
 
-.partner .message-text {
-  background: #b37feb;
-  color: white;
-  display: flex;
-  max-height: 500px;
-  padding: 4px 8px;
-  border-radius: 8px;
-  max-width: 700px;
-  flex-direction: column;
-  order: 1;
-  font-size: 1em;
-  align-items: start;
-}
-
-.partner .message-username {
-  font-size: 0.9em;
-  color: #00474f;
-  margin-bottom: 6px;
-  text-align: left;
-  font-weight: bolder;
-}
-
+.partner .message-username,
 .message .message-username {
   font-size: 0.9em;
   color: #00474f;
   margin-bottom: 6px;
-  text-align: right;
   font-weight: bolder;
+}
+.partner .message-username {
+  text-align: left;
+}
+.message .message-username {
+  text-align: right;
+}
+.message .message-text,
+.partner .message-text {
+  color: white;
+  display: flex;
+  padding: 4px 8px;
+  box-shadow: 0px 5px 5px rgba(5, 35, 100, 0.197);
+  max-width: 700px;
+  flex-direction: column;
+  font-size: 1em;
 }
 
 .message .message-text {
   background: #5ea3d0;
-  color: white;
-  display: flex;
-  max-height: 500px;
-  padding: 4px 8px;
-  border-radius: 8px;
-  max-width: 700px;
-  flex-direction: column;
   align-items: flex-end;
+  border-radius: 8px 8px 0 8px;
 }
+
+.partner .message-text {
+  background: #b37feb;
+  order: 1;
+  align-items: flex-start;
+  border-radius: 8px 8px 8px 0;
+}
+
 .message .message-text span {
-  font-size: 1.1em;
   text-align: right;
 }
+
+.message .message-text .time,
 .partner .message-text .time {
-  font-size: 11px;
+  font-size: 0.8em;
   color: #00474f;
-  text-align: right;
-  margin-left: auto;
+  opacity: 0.5;
 }
 
 .message .message-text .time {
-  font-size: 0.8em;
-  color: #00474f;
   text-align: left;
   margin-right: auto;
+}
+
+.partner .message-text .time {
+  text-align: right;
+  margin-left: auto;
+}
+.user-avatar {
+  margin-top: auto;
 }
 
 .user-avatar img {
   height: 50px;
   width: 50px;
   border-radius: 100%;
-  margin: 5px;
+  margin: 5px 5px 0 5px;
   border: solid 2px #1890ff;
 }
 
@@ -124,7 +127,6 @@
   width: 50px;
   height: 50px;
   border-radius: 100%;
-
   border: solid 2px #1890ff;
   margin: 5px;
 }
@@ -133,4 +135,13 @@
   margin-top: 5px;
   font-size: 20px;
   text-align: center;
+}
+
+.partner .message-content {
+  order: 2;
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
 }

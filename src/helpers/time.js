@@ -1,5 +1,3 @@
-import React from "react";
-
 var monthNames = [
   "January",
   "February",
@@ -49,7 +47,7 @@ export function formatDate(date, patternStr) {
     MMM = MMMM.substr(0, 3),
     yyyy = year + "",
     yy = yyyy.substr(2, 2);
-  // checks to see if month name will be used
+
   if (patternStr.indexOf("MMM") > -1) {
     patternStr = patternStr.replace("MMMM", MMMM).replace("MMM", MMM);
   } else {
@@ -77,4 +75,3 @@ export function formatDate(date, patternStr) {
 function twoDigitPad(num) {
   return num < 10 ? "0" + num : num;
 }
-// console.log(formatDate(new Date(), "dd-MM-yyyy HH:mm EEE"));

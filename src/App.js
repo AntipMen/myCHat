@@ -12,17 +12,15 @@ import { Route } from "./reducers/routerReducer";
 import { CUserInfo } from "./сomponents/ChatPage/ChatList/userInfo";
 
 const AuthorizedUser = () => (
-  <>
-    <div className="page">
-      <Header />
-      <Switch>
-        <Route exact path="/mychat" component={Home} />
-        <Route path="/chat/:_id" component={CMessagesList} />
-        <Route path="/user/:_id" component={CUserInfo} />
-        <Redirect from="/" to="/mychat" />
-      </Switch>
-    </div>
-  </>
+  <div className="page">
+    <Header />
+    <Switch>
+      <Route exact path="/mychat" component={Home} />
+      <Route path="/chat/:_id" component={CMessagesList} />
+      <Route path="/user/:_id" component={CUserInfo} />
+      <Redirect from="/" to="/mychat" />
+    </Switch>
+  </div>
 );
 const AnonUser = () => (
   <div>

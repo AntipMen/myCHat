@@ -4,9 +4,7 @@
   height: 700px;
   max-height: 100%;
   padding: 10px;
-  margin: 20px 22px 30px 14px;
-  border: solid 2px #096dd9;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .chats-list::-webkit-scrollbar-track {
@@ -16,7 +14,7 @@
 }
 
 .chats-list::-webkit-scrollbar {
-  width: 10px;
+  width: 3px;
   background-color: #f5f5f5;
 }
 
@@ -41,6 +39,7 @@
   border: solid 2px #096dd9;
   font-size: 18px;
   align-items: center;
+  overflow: hidden;
 }
 
 .chat {
@@ -70,17 +69,12 @@
 }
 
 .block-user-header {
-  background-image: linear-gradient(#91d5ff 20%, #597ef7 90%, #1890ff);
-  width: 350px;
+  width: 21%;
   height: 60px;
-  border: solid 1px #096dd9;
+  border-right: solid 2px #096dd9;
   display: flex;
   align-items: center;
   justify-content: space-around;
-}
-
-.input-search {
-  width: 250px;
 }
 
 span.fa {
@@ -105,7 +99,7 @@ span.fa + input {
 }
 
 .block-user-info {
-  position: fixed;
+  position: absolute;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
@@ -115,6 +109,7 @@ span.fa + input {
   margin-top: 200px;
   background: url("./bouncerate.jpg") top center;
   border-radius: 20px;
+  padding: 10px;
 }
 
 .block-body {
@@ -159,9 +154,9 @@ span.fa + input {
   width: 50px;
   height: 50px;
   border-radius: 100%;
-  background: linear-gradient(to right, #f6ffed, #87e8de);
   border: solid 2px #1890ff;
   margin: 0 15px 2px 0;
+  flex: 0 0 50px;
 }
 
 .circle-min-chat h1 {
@@ -179,6 +174,7 @@ span.fa + input {
   display: flex;
   flex-direction: column;
   bottom: 5px;
+  overflow: hidden;
 }
 
 .name-chat div {
@@ -190,9 +186,78 @@ span.fa + input {
   margin: 0 2px 0 0;
 }
 
+.name-chat h3,
+.name-chat div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .time-chat {
   display: flex;
-  justify-content: end;
-  font-size: 0.8em;
+  justify-content: flex-end;
+  font-size: 0.6em;
   margin-bottom: 30px;
+}
+.input-search {
+  width: 250px;
+}
+@media (max-width: 1412px) {
+  .block-user-info {
+    margin-left: 400px;
+    margin-top: 100px;
+  }
+}
+@media (max-width: 1392px) {
+  .block-user-header {
+    width: 22.3%;
+  }
+  .input-search {
+    width: 230px;
+  }
+}
+
+@media (max-width: 1312px) {
+  .block-user-header {
+    width: 23.5%;
+  }
+  .block-user-info {
+    width: 600px;
+  }
+}
+
+@media (max-width: 1248px) {
+  .block-user-header {
+    width: 25%;
+  }
+}
+@media (max-width: 1200px) {
+  .block-user-header {
+    width: 26.2%;
+  }
+}
+
+@media (max-width: 1120px) {
+  .input-search {
+    width: 200px;
+  }
+  .block-user-info {
+    width: 600px;
+  }
+}
+
+@media (max-width: 995px) {
+  .input-search {
+    width: 150px;
+  }
+  .block-user-info {
+    margin-left: 280px;
+    width: 500px;
+  }
+}
+
+@media (max-width: 821px) {
+  .input-search {
+    max-width: 100px;
+  }
 }

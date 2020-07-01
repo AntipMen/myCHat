@@ -1,22 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import "./index.css";
 import { Pending } from "../../../helpers";
 import { CSearchResult } from "../../../saga";
 import { formatDate } from "../../../helpers/time";
-import { store } from "../../../reducers";
 import { AvatarColors } from "../MessageForm/messageList/avatars";
-import { actionActiveChat } from "../../../actions";
 import { MessageCounter } from "../MessageForm/messageTake";
-import { message } from "antd";
 
 const ChatList = ({ chats, router, isMe }) => {
-  let today = formatDate(new Date(), "dd-MM-yyyy HH:mm EEE");
-  let tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 5);
-  tomorrow = formatDate(tomorrow, "dd-MM-yyyy HH:mm EEE");
-
   return chats ? (
     <>
       <div className="chats-list">
@@ -28,10 +20,9 @@ const ChatList = ({ chats, router, isMe }) => {
               key={chat._id}
               chat={chat}
             >
-              <ChatAvatar chat={chat} />
-             
+              <ChatAvatar chat={chat} state={{ overflow: "hidden" }} />
               <div className="name-chat">
-                <h3>{chat.title != null ? chat.title : "No Name Сhat"}</h3>
+                <h3>{chat.title != null ? chat.title : chat.owner.login}</h3>
                 <div>
                   <span>
                     {chat.messages.lastMessage &&
@@ -47,38 +38,21 @@ const ChatList = ({ chats, router, isMe }) => {
                   </span>
                   <span>
                     {chat.messages.lastMessage &&
-                      chat.messages.lastMessage.text.slice(0, 10) + "..."}
+                      chat.messages.lastMessage.text}
                   </span>
                 </div>
               </div>
-              <div className="time-chat">
-                {chat.messages.lastMessage &&
-                chat.messages.lastMessage.createdAt.slice(0, 11) ===
-                  today.slice(0, 11) ? (
-                  <span>
-                    {chat.messages.lastMessage.createdAt.includes("T")
-                      ? chat.messages.lastMessage.createdAt.substr(8, 5)
-                      : chat.messages.lastMessage.createdAt.slice(11, 16)}
-                  </span>
-                ) : chat.messages.lastMessage &&
-                  chat.messages.lastMessage.createdAt <= tomorrow ? (
-                  <span>
-                    {chat.messages.lastMessage &&
-                      chat.messages.lastMessage.createdAt.slice(17, 20)}
-                  </span>
-                ) : (
-                  <span>
-                    {chat.messages.lastMessage &&
-                      chat.messages.lastMessage.createdAt.slice(0, 11)}
-                  </span>
-                )}
-              </div>
-              <MessageCounter
-                chatId={chat._id}
-                activeChat={router}
-                message={chat.messages.lastMessage}
-                isMe={isMe}
-              />
+              <TimeMessage lastMessage={chat.messages.lastMessage} />
+
+              {chat._id === router &&
+              chat.messages.lastMessage === undefined ? null : (
+                <MessageCounter
+                  chatId={chat._id}
+                  activeChat={router}
+                  message={chat.messages.lastMessage}
+                  isMe={isMe}
+                />
+              )}
             </div>
           </Link>
         ))}
@@ -120,4 +94,26 @@ export const ChatAvatar = ({ chat }) => {
       {chat.title ? <h1>{chat.title.slice(0, 1)}</h1> : ""}
     </span>
   );
+};
+
+const TimeMessage = ({ lastMessage }) => {
+  let today = formatDate(new Date(), "yyyy-MM-dd HH:mm EEE");
+  let tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 5);
+  tomorrow = formatDate(tomorrow, "yyyy-MM-dd HH:mm EEE");
+  let time;
+
+  if (lastMessage) {
+    if (lastMessage.createdAt.includes("Z")) {
+      time = lastMessage.createdAt.substr(11, 5);
+    } else if (lastMessage.createdAt.slice(0, 10) === today.slice(0, 10)) {
+      time = lastMessage.createdAt.slice(11, 16);
+    } else if (lastMessage.createdAt.slice(0, 10) < tomorrow.slice(0, 10)) {
+      time = lastMessage.createdAt.slice(17, 20);
+    } else if (lastMessage.createdAt.slice(0, 10) > tomorrow.slice(0, 10)) {
+      time = lastMessage.createdAt.slice(0, 10);
+    }
+  }
+
+  return <span className="time-chat">{time}</span>;
 };
