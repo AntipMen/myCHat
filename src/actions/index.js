@@ -332,14 +332,15 @@ export function actionCreateNewChat(userId, auth, chatName) {
 }
 
 export function actionAllUsers(token) {
+  let sort = JSON.stringify([{}, { sort: [{ _id: -1 }] }]);
   return actionPending(
     "users",
     getGQL(
       {
         Authorization: "Bearer " + token,
       },
-      `query user{
-            UserFind(query: "[{}]"){
+      `query user($sort: String){
+            UserFind(query: $sort){
               _id
               login
               nick
@@ -349,7 +350,8 @@ export function actionAllUsers(token) {
               }
                 }
           }
-          `
+          `,
+      { sort }
     )
   );
 }

@@ -233,7 +233,7 @@ export const CSearchResult = connect(
 
 const UserAvatar = ({ user }) => {
   const { color, colorLighten } = AvatarColors(user.login + "a");
-  return user.avatar !== null ? (
+  return user.avatar !== null && user.avatar !== undefined ? (
     <img
       src={user.avatar && `http://chat.fs.a-level.com.ua/${user.avatar.url}`}
       width="50px"

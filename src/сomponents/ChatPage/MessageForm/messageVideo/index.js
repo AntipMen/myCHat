@@ -2,6 +2,7 @@ import React from "react";
 import Linkify from "linkifyjs/react";
 import MicrolinkCard from "@microlink/react";
 import getUrls from "get-urls";
+import "./index.css";
 
 export const MessageVideo = ({ video }) => (
   <>
@@ -38,7 +39,7 @@ export const LinkMessage = ({ message }) => {
   };
 
   return (
-    <div>
+    <div className="youtube">
       {message.text !== null ? (
         <Linkify>{parseURLs(message.text)}</Linkify>
       ) : null}

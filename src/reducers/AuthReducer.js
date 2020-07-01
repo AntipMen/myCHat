@@ -18,9 +18,14 @@ export default function authReducer(state, { type, token, message, users }) {
   }
 
   if (type === "SAVE_USERS") {
-    const isMe = users.find((me) => me._id === state.data.sub.id);
-    const avatar =
-      isMe.avatar !== null && isMe.avatar !== undefined ? isMe.avatar : null;
+    const isMe =
+      state.data !== null && state.data !== undefined
+        ? users.find((me) => me._id === state.data.sub.id)
+        : null;
+    if (isMe !== null && isMe !== undefined) {
+      var avatar =
+        isMe.avatar !== null && isMe.avatar !== undefined ? isMe.avatar : null;
+    }
     return { ...state, avatar };
   }
   if (type === "AUTH_LOGOUT") {

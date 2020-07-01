@@ -145,3 +145,10 @@
   display: flex;
   flex-direction: column;
 }
+
+@media (max-width: 1185px) {
+  .message .message-text,
+  .partner .message-text {
+    max-width: 490px;
+  }
+}

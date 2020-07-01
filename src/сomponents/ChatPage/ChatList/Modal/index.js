@@ -20,7 +20,7 @@ export const Modal = ({ auth, users, avatar, onUser }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const isMe = users
-    ? Object.values(users).find((user) => user.login === auth)
+    ? Object.values(users).find((user) => user._id === auth)
     : null;
   const valid = avatar === undefined;
 
@@ -44,15 +44,16 @@ export const Modal = ({ auth, users, avatar, onUser }) => {
           </div>
           <div className="modal-body">
             <div className="modal-avatar">
-              {" "}
-              <img
-                src={
-                  isMe.avatar &&
-                  `http://chat.fs.a-level.com.ua/${isMe.avatar.url}`
-                }
-                width="200px"
-                alt="avatar"
-              />
+              {isMe !== null && isMe !== undefined ? (
+                <img
+                  src={
+                    isMe.avatar &&
+                    `http://chat.fs.a-level.com.ua/${isMe.avatar.url}`
+                  }
+                  width="200px"
+                  alt="avatar"
+                />
+              ) : null}
             </div>
             <div className="modal-user-info">
               <h1>{isMe.login}</h1>
@@ -89,7 +90,7 @@ const CLogoutButton = connect(
 
 export const CModal = connect(
   (state) => ({
-    auth: state.auth.data.sub.login,
+    auth: state.auth.data.sub.id,
     users: state.users,
     avatar: state.message.avatar,
   }),

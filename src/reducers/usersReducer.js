@@ -19,7 +19,11 @@ export default function usersReducer(state, { type, users, avatar }) {
     let changeUser = Object.values(state).find(
       (user) => user._id === avatar._id
     );
-    changeUser.avatar = avatar.avatar;
+    let infoUser =
+      changeUser !== null && changeUser !== undefined
+        ? (changeUser.avatar = avatar.avatar)
+        : null;
+
     return { ...state };
   }
   if (type === "AUTH_LOGOUT") {

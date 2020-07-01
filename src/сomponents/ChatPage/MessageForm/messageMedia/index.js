@@ -101,5 +101,6 @@ export const CMessageMedia = connect((state) => ({
     state.promise &&
     state.promise.newmesmedia &&
     state.promise.newmesmedia.payload &&
+    state.promise.newmesmedia.payload.data.MessageUpsert &&
     state.promise.newmesmedia.payload.data.MessageUpsert.media,
 }))(MessageMedia);

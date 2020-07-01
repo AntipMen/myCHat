@@ -18,7 +18,7 @@ export const MessageCounter = ({ message, chatId, activeChat, isMe }) => {
     ) {
       setCounter((counter) => counter + 1);
     }
-  }, [message._id, isMe, chatId, chatWithNewMes,owner]);
+  }, [message && message._id, isMe, chatId, chatWithNewMes, owner]);
 
   useEffect(() => {
     if (chatId === activeChat) {
@@ -26,10 +26,10 @@ export const MessageCounter = ({ message, chatId, activeChat, isMe }) => {
     }
   }, [activeChat, chatId]);
   useEffect(() => {
-    if (message.createdAt < today) {
+    if (message && message.createdAt < today) {
       setCounter(0);
     }
-  }, [today, message.createdAt]);
+  }, [today, message && message.createdAt]);
   return (
     <>
       {counter > 0 && chatWithNewMes !== activeChat && owner !== isMe && (
